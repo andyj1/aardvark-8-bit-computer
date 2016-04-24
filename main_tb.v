@@ -7,6 +7,15 @@
 // Date: 04/20/2016
 // DUT (Device Under Testing)
 //////////////////////////////////////////////////////////////////////////////////
+
+`include "signext5.v"
+`include "alu.v"
+`include "ctrl.v"
+`include "mux4_1.v"
+`include "mux2_1.v"
+
+`timescale 1ns / 1ns
+
 module main_tb();
 
 //?????????????Input Ports?????????????????????????????
@@ -25,11 +34,19 @@ signext5 signext(result, data1);
 //initial blocks are sequential and start at time 0
 initial
 begin
+
+	
+	
 	$display("<<Starting the Simulation>>");
 	data1 = 5'b10101;
 	$display("data1: %b result: %b", data1, result);
 	$display("data1: %d result: %d", data1, result);
 end
+
+//ctrl(jctrl, jrctrl, memWrite, memRead, memToReg, ALUop, instr);
+//alu(ALUop, data1, data2, zero, result);
+//four2one(out, in0, in1, in2, in3, ctrl);
+//two2one(out, in0, in1, ctrl);
 
 endmodule
 		

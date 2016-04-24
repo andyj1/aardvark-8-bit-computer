@@ -49,17 +49,22 @@ begin
 	save_bit = 0;
 	if (ALUop == 3'b000) begin		//addition
 		result = data1 + data2;
-	end if (ALUop == 3'b001) begin	//nand
-		result = data1 ~& data2;
-	end if (ALUop == 3'b010) begin	//comparison
+	end 
+	if (ALUop == 3'b001) begin	//nand
+		result = ~(data1 & data2);
+	end 
+	if (ALUop == 3'b010) begin	//comparison
 		if (data1 > data2) begin
 			result = 0;
-		end if (data1 < data2) begin
+		end 
+		if (data1 < data2) begin
 			result = 1;
 		end
-	end if (ALUop == 3'b011) begin	//shift left
+	end 
+	if (ALUop == 3'b011) begin	//shift left
 		result = data1 << 1;
-	end if (ALUop == 3'b100) begin	//shift right
+	end 
+	if (ALUop == 3'b100) begin	//shift right
 		//keep the sign
 		if (data1 >= 8'b10000000) begin
 			save_bit = 8'b10000000;
@@ -68,7 +73,8 @@ begin
 		end
 		result = save_bit + (data1 >> 1);
 		
-	end if (ALUop == 3'b101) begin	//equal
+	end 
+	if (ALUop == 3'b101) begin	//equal
 		if (data1 == data2) begin
 			zero = 1;
 		end

@@ -45,43 +45,44 @@ begin
 	memToReg = 0;
 	ALUop = 3'b000;
 	if (instr == 4'b0000) 
-			begin	//add
-				ALUop = 3'b000;
-		end if (instr == 4'b0010) 
-			begin	//nand
-				ALUop = 3'b001;
-		end if (instr == 4'b0100) 
-			begin	//slt_0
-				ALUop = 3'b010;
-		end if (instr ==4'b0101) 
-			begin	//slt_1
-				ALUop = 3'b010;
-		end if (instr == 4'b0110) 
-			begin	//sl
-				ALUop = 3'b011;
-		end if (instr == 4'b0111) 
-			begin	//sr
-				ALUop = 3'b100;
-		end if (instr == 4'b1000) 
-			begin	//lw
-				memRead = 1;
-				memToReg = 1;
-		end if (instr == 4'b1001) 
-			begin //sw
-				memWrite = 1;
-		end if (instr == 4'b1010) 
-			begin	//addi (didn't add to excel sheet)
-				ALUop = 3'b101;
-		end if (instr == 4'b1011) 
-			begin	//jr
-				jrctlr = 1;
-		end if (instr == 4'b1100) 
-			begin	//beq	
-				ALUop = 3'b101;
-			jctrl = 1;
-		end if (instr == 4'b1110) 
-			begin //jal
-				jctrl = 1;	
-		end
+		begin	//add
+			ALUop = 3'b000;
+	end if (instr == 4'b0010) 
+		begin	//nand
+			ALUop = 3'b001;
+	end if (instr == 4'b0100) 
+		begin	//slt_0
+			ALUop = 3'b010;
+	end if (instr ==4'b0101) 
+		begin	//slt_1
+			ALUop = 3'b010;
+	end if (instr == 4'b0110) 
+		begin	//sl
+			ALUop = 3'b011;
+	end if (instr == 4'b0111) 
+		begin	//sr
+			ALUop = 3'b100;
+	end if (instr == 4'b1000) 
+		begin	//lw
+			memRead = 1;
+			memToReg = 1;
+	end if (instr == 4'b1001) 
+		begin //sw
+			memWrite = 1;
+	end if (instr == 4'b1010) 
+		begin	//addi (didn't add to excel sheet)
+			ALUop = 3'b101;
+	end if (instr == 4'b1011) 
+		begin	//jr
+			jrctlr = 1;
+	end if (instr == 4'b1100) 
+		begin	//beq	
+			ALUop = 3'b101;
+		jctrl = 1;
+	end if (instr == 4'b1110) 
+		begin //jal
+			jctrl = 1;	
 	end
+	end
+	
 endmodule
