@@ -14,11 +14,11 @@
 
 `timescale 1ns / 1ns
 
-module alu(alu_op, data1, data2, zero, result);
+module alu(ALUop, data1, data2, zero, result);
 
 //−−−−−−−−−−−−−Input Ports−−−−−−−−−−−−−−−−−−−−−−−−−−−−−
 
-input [2:0]alu_op;	//3 bits of ALU opcode
+input [2:0]ALUop;	//3 bits of ALU opcode
 input [7:0]data1;	//8 bits of data
 input [7:0]data2;	//8 bits of data
 
@@ -29,7 +29,7 @@ output zero; 			//Gives 1 for jumping
 
 //−−−−−−−−−−−−−Input ports Data Type−−−−−−−−−−−−−−−−−−−
 // By rule all the input ports should be wires
-wire [2:0]alu_op;	//3 bits of ALU opcode
+wire [2:0]ALUop;	//3 bits of ALU opcode
 wire [7:0]data1;	//8 bits of data
 wire [7:0]data2;	//8 bits of data
 
@@ -42,24 +42,24 @@ reg zero;
 reg [7:0]save_bit;
 
 //−−−−−−----−-−−−−−−Instructions---−−−−−−−−−−−−−−−--−−−
-always @ alu_op
+always @ ALUop
 begin
 	result = 0;
 	zero = 0;
 	save_bit = 0;
-	if (alu_op == 3'b000) begin		//addition
+	if (ALUop == 3'b000) begin		//addition
 		result = data1 + data2;
-	end if (alu_op == 3'b001) begin	//nand
+	end if (ALUop == 3'b001) begin	//nand
 		result = data1 ~& data2;
-	end if (alu_op == 3'b010) begin	//comparison
+	end if (ALUop == 3'b010) begin	//comparison
 		if (data1 > data2) begin
 			result = 0;
 		end if (data1 < data2) begin
 			result = 1;
 		end
-	end if (alu_op == 3'b011) begin	//shift left
+	end if (ALUop == 3'b011) begin	//shift left
 		result = data1 << 1;
-	end if (alu_op == 3'b100) begin	//shift right
+	end if (ALUop == 3'b100) begin	//shift right
 		//keep the sign
 		if (data1 >= 8'b10000000) begin
 			save_bit = 8'b10000000;
@@ -68,7 +68,7 @@ begin
 		end
 		result = save_bit + (data1 >> 1);
 		
-	end if (alu_op == 3'b101) begin	//equal
+	end if (ALUop == 3'b101) begin	//equal
 		if (data1 == data2) begin
 			zero = 1;
 		end
