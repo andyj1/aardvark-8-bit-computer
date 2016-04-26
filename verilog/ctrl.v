@@ -1,19 +1,21 @@
 //////////////////////////////////////////////////////////////////////////////////
-//Created by: Brenda So
-//Created at: 04/17/2016
-// Module Name: ctrl.v
-// Description: control unit of 8 bit computer
+// Created by: Team Aardvark
+// Course: Cooper Union ECE151A Spring 2016
+// Professor: Professor Marano
+// Module Name: 
+// Description: 
 //////////////////////////////////////////////////////////////////////////////////
 
 `timescale 1ns / 1ns
+//NOT FINISHED YET
 
-module ctrl(jctrl, jrctrl, memWrite, memRead, memToReg, ALUop, ALUsrc, regWrite, instr);
+module ctrl(jctrl, jrctrl, memWrite, memRead, memToReg, ALUop, ALUsrc, regWrite, brctrl, ractrl, instr);
 
-//?????????????Input Ports?????????????????????????????
+//-------------Input Ports-----------------------------
 
 input [3:0] instr;		
 
-//?????????????Output Ports????????????????????????????
+//-------------Output Ports----------------------------
 
 output jctrl;
 output jrctrl;
@@ -23,12 +25,14 @@ output memToReg;
 output [2:0]ALUop;
 output ALUsrc;
 output regWrite;
+output brctrl;
+output ractrl;
 
-//?????????????Input ports Data Type???????????????????
+//-------------Input ports Data Type-------------------
 // By rule all the input ports should be wires
 wire [3:0] instr;		
 
-//?????????????Output Ports Data Type??????????????????
+//-------------Output Ports Data Type------------------
 // Output port can be a storage element (reg) or a wire
 reg jctrl;
 reg jrctrl;
@@ -38,8 +42,10 @@ reg memToReg;
 reg [2:0]ALUop;
 reg ALUsrc;
 reg regWrite;
+reg brctrl;
+reg ractrl;
 
-//??????----?-??????Instructions---???????????????--???
+//------------------Instructions-----------------------
 always @ instr
 begin
 	jctrl = 0;
@@ -50,6 +56,11 @@ begin
 	ALUop = 3'b000;
 	ALUsrc = 0;
 	regWrite = 0;
+	brctrl = 0;
+	ractrl = 0;
+
+
+	//*****add conditions for brctrl and ractrl
 	if(inst[3] == 0) begin
 		regWrite = 1;
 		if (instr == 4'b0000) begin	//add
