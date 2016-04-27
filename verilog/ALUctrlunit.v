@@ -28,10 +28,10 @@ wire t1;
 reg [2:0] ALUctrlbits;
 
 //------------------Instructions-----------------------
-always begin
+initial
 	ALUctrlbit = 0;
-	//FILL IN THIS SECTION
-	//TODO: {ALUop and funct} --> ALUctrlbits
+
+always begin
 	if (ALUop == 000) && (funct == 1) begin
 		//add
 		ALUctrlbits = 001;

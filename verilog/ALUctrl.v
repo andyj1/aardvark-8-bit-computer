@@ -8,7 +8,7 @@
 
 `timescale 1ns / 1ns
 
-module alu_ctrl(zero, result, ALUctrlbits, data1, data2);
+module ALUctrl(zero, result, ALUctrlbits, data1, data2);
 
 //-------------Input Ports-----------------------------
 input [2:0] ALUctrlbits;	//control bit from ALU control unit

@@ -8,7 +8,7 @@
 
 `timescale 1ns / 1ns
 
-module alu_ctrl(zero, result, type,data1, data2);
+module ALU (zero, result, type,data1, data2);
 
 //-------------Input Ports-----------------------------
 input [7:0] type;

@@ -25,7 +25,7 @@ wire [4:0]datain;
 reg [7:0] dataout;
 
 //-------------Intermediate Ports Data Type-------------
-reg [2:0] sign;
+reg [3:0] sign;
 
 //------------------Instructions-----------------------
 always @ datain

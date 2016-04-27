@@ -15,7 +15,7 @@ input [7:0] input1;
 
 //-------------Output Ports----------------------------
 
-output [7:0] output1; 	//8 bits of outputput
+output [7:0] output1; 	//8 bits of output
 
 //-------------Input ports Data Type-------------------
 wire [7:0] input1;

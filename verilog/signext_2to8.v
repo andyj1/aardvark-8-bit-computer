@@ -8,7 +8,7 @@
 
 `timescale 1ns / 1ns
 
-module signext_2to8(dataout,datain);
+module signext_2to8 (dataout,datain);
 
 //-------------Input Ports-----------------------------
 input [1:0] datain;	//input 
