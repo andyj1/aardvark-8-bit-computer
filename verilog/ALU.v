@@ -19,16 +19,7 @@ input [7:0] data2;			//8 bits of data2
 output [7:0] result; 	//8 bits of result
 output zero; 			//Gives 1 for jumping
 
-//-------------Input ports Data Type-------------------
-wire [7:0] type;
-wire [7:0] data1;	//8 bits of data
-wire [7:0] data2;	//8 bits of data
 
-//-------------Output Ports Data Type------------------
-reg [7:0] result;
-reg zero;
-
-//-------------Output Ports Data Type------------------
 reg [7:0]save_msb;
 
 //------------------Instructions-----------------------
