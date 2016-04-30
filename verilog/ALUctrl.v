@@ -8,9 +8,10 @@
 
 `timescale 1ns / 1ns
 
-module ALU (zero, result, data1, data2);
+module ALUctrl(zero, result, ALUctrlbits, data1, data2);
 
 //-------------Input Ports-----------------------------
+input [2:0] ALUctrlbits;	//control bit from ALU control unit
 input [7:0] data1;			//8 bits of data1
 input [7:0] data2;			//8 bits of data2
 
@@ -18,11 +19,13 @@ input [7:0] data2;			//8 bits of data2
 output [7:0] result; 	//8 bits of result
 output zero; 			//Gives 1 for jumping
 
+wire [2:0] ALUctrlbits;
 wire [7:0] data1;
 wire [7:0] data2;
 reg [7:0] result;
 reg zero;
 
+reg [7:0] save_msb;
 
 //------------------Instructions-----------------------
 
@@ -33,18 +36,45 @@ reg zero;
 // 101: shift right
 // 110: equal
 
-always @ data2 begin
+initial begin
 	result = 0;
 	zero = 0;
+	save_msb = 0;
+end
 
-	if (data1 == 8'b00000001) begin	//addition
+always @ ALUctrlbits begin
+	if (ALUctrlbits == 3'b001) begin		//addition
 		result = data1 + data2;
 	end 
-	if (data1 == 8'b11111111) begin	//equality check
-		if(data1 == data2)
-			zero = 1;
+	if (ALUctrlbits == 3'b010) begin	//nand
+		result = ~(data1 & data2);
 	end 
-	
+	if (ALUctrlbits == 3'b011) begin	//comparison
+		if (data1 > data2) begin
+			zero = 0;
+		end 
+		if (data1 < data2) begin
+			zero = 1;
+		end
+	end 
+	if (ALUctrlbits == 3'b100) begin	//shift left
+		result = data1 << 1;
+	end 
+	if (ALUctrlbits == 3'b101) begin	//shift right
+		//keep the sign
+		if (data1 >= 8'b10000000) begin
+			save_msb = 8'b10000000;
+		end if (data1 < 8'b00000000) begin
+			save_msb = 8'b00000000;
+		end
+		result = save_msb + (data1 >> 1);
+		
+	end 
+	if (ALUctrlbits == 3'b110) begin	//equal
+		if (data1 == data2) begin
+			zero = 1;
+		end
+	end 
 end
 
 
