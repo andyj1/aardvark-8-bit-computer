@@ -13,8 +13,8 @@ module register_file (jctrlctrl, rt_data, rs_data, ra_addr, slt0_reg, slt1_reg, 
 input wire regWrite;
 input wire beqctrl;
 input wire jrctrl;
-input wire [3:0] rt_addr;
-input wire [3:0] rs_addr;
+input wire [1:0] rt_addr;
+input wire [1:0] rs_addr;
 input wire [7:0] dataToWrite;
 output reg jctrlctrl;
 output reg [7:0] rt_data;
