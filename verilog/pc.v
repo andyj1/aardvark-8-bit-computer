@@ -8,25 +8,20 @@
 
 `timescale 1ns / 1ns
 
-module signext_2to8 (dataout,datain);
+module mux2_1(output1, input1);
 
 //-------------Input Ports-----------------------------
-input wire [1:0] datain;	//input 
+input wire [7:0] input1;
 
 //-------------Output Ports----------------------------
-output reg [7:0] dataout; 	//8 bits of output
 
-//-------------Intermediate Ports Data Type-------------
-reg [6:0] sign;
+output reg [7:0] output1; 	//8 bits of output
 
 //------------------Instructions-----------------------
-always @ datain
-	begin
-		if (datain >= 2'b10) begin
-			sign = 6'b111111;
-		end if (datain < 2'b10) begin
-			sign = 6'b000000;
-		end
-		dataout = {sign,datain};
-	end
+initial
+	output1 = 0;
+	
+always 
+	output1 = input1;
+	
 endmodule

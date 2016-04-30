@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Created by: Team Aardvark
+// Course: Cooper Union ECE151A Spring 2016
+// Professor: Professor Marano
+// Module Name: 
+// Description: 
+//////////////////////////////////////////////////////////////////////////////////
+
 `timescale 1ns / 1ns
 `include "ALU.v"
 module ALU_tb ();
@@ -15,19 +23,20 @@ wire zero;
 always 
 	#2 clk = ~clk;
 initial
-begin
-	clk = 1'b0;	
-	$display($time, "<<starting the simultaion>>");
-	
-	data1 = 8'b00000001;
-	data2 = 8'b11111110;	
+	begin
+		clk = 1'b0;	
+		$display($time, "<<starting the simultaion>>");
+		
+		data1 = 8'b00000001;
+		data2 = 8'b11111110;	
 
-	$monitor("data1=%b,data2=%b,result=%b,zero=%b", data1,data2,result,zero);
+		$monitor("data1=%b,data2=%b,result=%b,zero=%b", data1,data2,result,zero);
+		
+		$display($time, "<<finishing the simulation>>");
+		
+		#20 $finish;
+	end
 	
-	$display($time, "<<finishing the simulation>>");
-	
-	#20 $finish;
-end
 ALU alu(zero, result, data1, data2);
 
 endmodule

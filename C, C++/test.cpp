@@ -13,7 +13,7 @@ int main(){
 	myfile.open("example.bin");
 	
 	int m =0;
-	for (int i =0; i < 255; i++){
+	for (int i =0; i < 256; i++){
 		myfile << bin[m] << endl;;
 		m++;
 		if (m >= 10){

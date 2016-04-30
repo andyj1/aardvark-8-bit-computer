@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Created by: Team Aardvark
+// Course: Cooper Union ECE151A Spring 2016
+// Professor: Professor Marano
+// Module Name: 
+// Description: 
+//////////////////////////////////////////////////////////////////////////////////
+
 `timescale 1ns / 1ns
 `include "instruction_reg.v"
 module instruction_reg_tb ();
@@ -18,19 +26,19 @@ wire [1:0] i_immediate;
 always 
 	#2 clk = ~clk;
 initial
-begin
-	clk = 1'b0;	
-	$display($time, "<<starting the simultaion>>");
-	
-	instruction_input = 8'b00010000;
-	
+	begin
+		clk = 1'b0;	
+		$display($time, "<<starting the simultaion>>");
+		
+		instruction_input = 8'b00010000;
+		
 
-	$monitor("j_immediate=%b\t, jump_opcode_check=%b\t,funct=%b\t,instruction_to_control_unit=%b\t,rt=%b\t,rs=%b\t,i_immediate=%b\n", j_immediate,jump_opcode_check,funct,instruction_to_control_unit,rt,rs,i_immediate);
-	
-	$display($time, "<<finishing the simulation>>");
-	
-	#20 $finish;
-end
+		$monitor("j_immediate=%b\t, jump_opcode_check=%b\t,funct=%b\t,instruction_to_control_unit=%b\t,rt=%b\t,rs=%b\t,i_immediate=%b\n", j_immediate,jump_opcode_check,funct,instruction_to_control_unit,rt,rs,i_immediate);
+		
+		$display($time, "<<finishing the simulation>>");
+		
+		#20 $finish;
+	end
 
 instruction_reg instreg(j_immediate,jump_opcode_check, instruction_to_control_unit, rt, rs, i_immediate, funct, instruction_input);
 

@@ -1,31 +1,40 @@
 //////////////////////////////////////////////////////////////////////////////////
-// Module Name: memory.v
-// Description: loads data from instruction binary file
-// von Neumann has 1 memory, harvard has 2 
+// Created by: Team Aardvark
+// Course: Cooper Union ECE151A Spring 2016
+// Professor: Professor Marano
+// Module Name: 
+// Description: 
 //////////////////////////////////////////////////////////////////////////////////
 
 `timescale 1ns / 1ns
 
-module memory(addr, data);
+module memory(mem_data, instructions, pc, address);
 
-parameter Instructions = "./example.bin";
+input wire [7:0] pc;
+input wire [7:0] address;
 
-//−−−−−−−−−−−−−Input Ports−−−−−−−−−−−−−−−−−−−−−−−−−−−−−
-input [7:0] addr;
+output reg [7:0] instructions;
+output reg [7:0] mem_data;
 
-//−−−−−−−−−−−−−Output Ports−−−−−−−−−−−−−−−−−−−−−−−−−−−−
-output [7:0] data;
+parameter INSTRUCTIONS = "./test.bin";
 
-reg [7:0] ram_reg [0:255];   
-wire [7:0] addr; 
-wire [7:0] data;
-	
-//-------------load instructions---------------
-//8 bit wide, 256 address deep register memory
-initial begin
-        $readmemb(Instructions, ram_reg);       
-end
+reg [7:0] ram_reg [255:0]; //8 bit wide, 256 address deep register memory
 
-assign data = ram_reg[addr];
+initial 
+	begin
+		$readmemb(INSTRUCTIONS, mem_data);  
+	end
+
+assign data = mem_data[address];
+
+//Instruction memory
+always @ pc
+	begin
+		instructions = pc;
+	end
+
+
+//data memory
+	//NOT FINISHED
 
 endmodule
