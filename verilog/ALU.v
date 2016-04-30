@@ -11,18 +11,12 @@
 module ALU (zero, result, data1, data2);
 
 //-------------Input Ports-----------------------------
-input [7:0] data1;			//8 bits of data1
-input [7:0] data2;			//8 bits of data2
+input wire [7:0] data1;			//8 bits of data1
+input wire [7:0] data2;			//8 bits of data2
 
 //-------------Output Ports----------------------------
-output [7:0] result; 	//8 bits of result
-output zero; 			//Gives 1 for jumping
-
-wire [7:0] data1;
-wire [7:0] data2;
-reg [7:0] result;
-reg zero;
-
+output reg [7:0] result; 	//8 bits of result
+output reg zero ; 			//Gives 1 for jumping
 
 //------------------Instructions-----------------------
 

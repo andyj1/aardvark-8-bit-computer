@@ -10,24 +10,15 @@
 
 module instruction_reg (j_immediate, jump_opcode_check,instruction_to_control_unit, rt, rs, i_immediate, funct, instruction_input);
 //-------------Input-------------------
-input [7:0] instruction_input;
+input wire [7:0] instruction_input;
 //-------------Output------------------
-output [4:0] j_immediate;
-output [1:0] jump_opcode_check;
-output [2:0] instruction_to_control_unit;
-output [1:0] rt;
-output [1:0] rs;
-output [1:0] i_immediate;
-output funct;
-
-wire [7:0] instruction_input;
-reg [4:0] j_immediate;
-reg [1:0] jump_opcode_check;
-reg [2:0] instruction_to_control_unit;
-reg [1:0] rt;
-reg [1:0] rs;
-reg [1:0] i_immediate;
-reg funct;
+output reg [4:0] j_immediate;
+output reg [1:0] jump_opcode_check;
+output reg [2:0] instruction_to_control_unit;
+output reg [1:0] rt;
+output reg [1:0] rs;
+output reg [1:0] i_immediate;
+output reg funct;
 
 //------------------Instructions-----------------------
 initial 

@@ -1,6 +1,6 @@
 `timescale 1ns / 1ns
 `include "ALU.v"
-module instruction_reg_tb ();
+module ALU_tb ();
 
 //-------------Input-------------------
 reg [7:0] data1;			//8 bits of data1

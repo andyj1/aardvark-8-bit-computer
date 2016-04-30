@@ -11,25 +11,19 @@
 module ALUctrl(zero, result, ALUctrlbits, data1, data2);
 
 //-------------Input Ports-----------------------------
-input [2:0] ALUctrlbits;	//control bit from ALU control unit
-input [7:0] data1;			//8 bits of data1
-input [7:0] data2;			//8 bits of data2
+input wire [2:0] ALUctrlbits;	//control bit from ALU control unit
+input wire [7:0] data1;			//8 bits of data1
+input wire [7:0] data2;			//8 bits of data2
 
 //-------------Output Ports----------------------------
-output [7:0] result; 	//8 bits of result
-output zero; 			//Gives 1 for jumping
-
-wire [2:0] ALUctrlbits;
-wire [7:0] data1;
-wire [7:0] data2;
-reg [7:0] result;
-reg zero;
+output reg [7:0] result; 	//8 bits of result
+output reg zero; 			//Gives 1 for jumping
 
 reg [7:0] save_msb;
 
 //------------------Instructions-----------------------
 
-// 001: add
+// 001: add/addi
 // 010: nand
 // 011: comparison
 // 100: shift left
@@ -43,7 +37,7 @@ initial begin
 end
 
 always @ ALUctrlbits begin
-	if (ALUctrlbits == 3'b001) begin		//addition
+	if (ALUctrlbits == 3'b001) begin	//add
 		result = data1 + data2;
 	end 
 	if (ALUctrlbits == 3'b010) begin	//nand
@@ -61,16 +55,14 @@ always @ ALUctrlbits begin
 		result = data1 << 1;
 	end 
 	if (ALUctrlbits == 3'b101) begin	//shift right
-		//keep the sign
 		if (data1 >= 8'b10000000) begin
 			save_msb = 8'b10000000;
-		end if (data1 < 8'b00000000) begin
+		end if (data1 < 8'b10000000) begin
 			save_msb = 8'b00000000;
 		end
 		result = save_msb + (data1 >> 1);
-		
 	end 
-	if (ALUctrlbits == 3'b110) begin	//equal
+	if (ALUctrlbits == 3'b110) begin	//equality check
 		if (data1 == data2) begin
 			zero = 1;
 		end

@@ -1,6 +1,6 @@
 `timescale 1ns / 1ns
 `include "ALUctrlunit.v"
-module instruction_reg_tb ();
+module ALULctrlunit_tb ();
 
 //-------------Input-------------------
 reg [2:0] ALUop;

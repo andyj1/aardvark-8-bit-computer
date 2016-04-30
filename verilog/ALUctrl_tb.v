@@ -1,6 +1,6 @@
 `timescale 1ns / 1ns
 `include "ALUctrl.v"
-module instruction_reg_tb ();
+module ALUctrl_tb ();
 
 //-------------Input-------------------
 reg [2:0] ALUctrlbits;	//control bits from ALU control unit
@@ -20,9 +20,9 @@ begin
 	clk = 1'b0;	
 	$display($time, "<<starting the simultaion>>");
 	
-	ALUctrlbits = 3'b011;
-	data1 = 8'b00101001;
-	data2 = 8'b11111111;	
+	ALUctrlbits = 3'b101;
+	data1 = 8'b01000001;
+	data2 = 8'b10111111;	
 
 	$monitor("ALUctrlbits=%b, data1=%b,data2=%b,result=%b,zero=%b", ALUctrlbits,data1,data2,result,zero);
 	

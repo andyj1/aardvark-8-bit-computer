@@ -8,19 +8,14 @@
 
 `timescale 1ns / 1ns
 
-module ALUctrl(ALUctrlbits, ALUop, funct, t0, t1);
+module ALUctrl(ALUctrlbits, ALUop, funct);
 
 //-------------Input-------------------
-input [2:0] ALUop;
-input funct;
-input t0;	//slt_0 register from register file
-input t1;	//slt_1 register from register file
+input wire [2:0] ALUop;
+input wire funct;
 //-------------Output------------------
-output [2:0] ALUctrlbits;
+output reg [2:0] ALUctrlbits;
 
-wire [2:0] ALUop;
-wire funct, t0, t1;
-reg [2:0] ALUctrlbits;
 
 //------------------Instructions-----------------------
 initial
@@ -48,7 +43,7 @@ always @(~ALUop || ~funct) begin
 	end if ((ALUop == 3'b101) && (funct == 0)) begin
 		//addi 
 		ALUctrlbits = 3'b001; //same as add
-	end if (ALUop == 3'b110) begin
+	end if (ALUop == 3'b101) begin
 		//beq
 		ALUctrlbits = 3'b110;
 	end 
