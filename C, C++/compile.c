@@ -27,7 +27,7 @@ int main(){
 	char *buffer[1024];
 	char *outbuf[1024];
 	int text = 0;
-	int data = 64;
+	int data = 76;
 	
 	//open input and output file
 	printf("Enter an input file: ");
@@ -42,7 +42,7 @@ int main(){
 	}
 	//store labels in a library
 	Label labellist[8];
-	instrLabel instrLabellist[8];
+	instrLabel instrLabellist[4];
 	int i = 0;
 	int numLabel = 0;
 	
