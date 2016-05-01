@@ -10,7 +10,7 @@ int main(){
 
 	string bin[10] = {"00010000","01010000","00010111","00000000", "11111111", "11101111","10101111","11101000","11111111","00000000"};
 	ofstream myfile;
-	myfile.open("example.bin");
+	myfile.open("test.bin");
 	
 	int m =0;
 	for (int i =0; i < 256; i++){
