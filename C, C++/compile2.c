@@ -5,8 +5,14 @@ int main()
 {
 	FILE *fp;
 	FILE *outptr;
-	fp = fopen("linked.txt", "r+");
-	outptr = fopen("output.txt", "w+");
+	char linkerBuff[255];
+	char buffName[255];
+	printf("Enter linker file: ");
+	scanf("%s",linkerBuff);
+	fp = fopen(linkerBuff, "r+");
+	printf("Enter the output file: ");
+	scanf("%s", buffName);
+	outptr = fopen(buffName, "w+");
 	int counter = 0;
 	char buff[255];
 	char s[3];
@@ -23,12 +29,12 @@ int main()
 		for (int i =0; i < 8; i++){
 			globalVar[numOfGlobals][i] = buff[i];	
 		}
-		printf("%s\n",globalVar[numOfGlobals]);
+		//printf("%s\n",globalVar[numOfGlobals]);
 		numOfGlobals += 1;
 	}else{
 		while(fgets(buff, 255, (FILE*)fp) != NULL){
 			
-			printf("%s\n",buff);
+			//printf("%s",buff);
 			char *instr = "0000";
 			char *string2 = "00";
 			char *string3 = "00";
@@ -127,61 +133,52 @@ int main()
 				char opcode[] = "10110011";
 				strncpy(result, opcode, 8);
 			}
-
 			//Setting registers to binary
 			char * reg1;
 			char * reg2;
-			if(strcmp(string2,"$s1")==0){
-				char temp[3] = {'0', '0', '\0'};
-				reg1 = &temp[0];
+			if (string2[0] == '$' && string3[0] == '$'){
+				if(strcmp(string2,"$s1")==0){
+					char temp[3] = {'0', '0', '\0'};
+					reg1 = &temp[0];
+				}
+				else if(strcmp(string2,"$s2")==0){
+					char temp[3] = {'0', '1', '\0'};
+					reg1 = &temp[0];
+				}
+				else if(strcmp(string2,"$sp")==0){
+					char temp[3]  = {'1', '0', '\0'};
+					reg1 = &temp[0];
+				}
+				else if(strcmp(string2,"$ra")==0){
+					char temp[3] = {'1', '1', '\0'};
+					reg1 = &temp[0];
+				}
+				//Same for reg2
+				if(strcmp(string3,"$s1")==0){
+					char temp1[3] = {'0', '0', '\0'};
+					reg2 = &temp1[0];
+				}
+				else if(strcmp(string3,"$s2")==0){
+					char temp1[3] = {'0', '1', '\0'};
+					reg2 = &temp1[0];
+				}
+				else if(strcmp(string3,"$sp")==0){
+					char temp1[3] = {'1', '0', '\0'};
+					reg2 = &temp1[0];
+				}
+				else if(strcmp(string3,"$ra")==0){
+					char temp1[3] = {'1', '1', '\0'};
+					reg2 = &temp1[0];
+				}
 			}
-			else if(strcmp(string2,"$s2")==0){
-				char temp[3] = {'0', '1', '\0'};
-				reg1 = &temp[0];
-			}
-			else if(strcmp(string2,"$sp")==0){
-				char temp[3]  = {'1', '0', '\0'};
-				reg1 = &temp[0];
-			}
-			else if(strcmp(string2,"$ra")==0){
-				char temp[3] = {'1', '1', '\0'};
-				reg1 = &temp[0];
-			}
-			//Same for reg2
-			printf("string3: %s ", string3);
-			if(strcmp(string3,"$s1")==0){
-				char temp1[3] = {'0', '0', '\0'};
-				reg2 = &temp1[0];
-				printf("What'sup!\n");
-			}
-			else if(strcmp(string3,"$s2")==0){
-				char temp1[3] = {'0', '1', '\0'};
-				reg2 = &temp1[0];
-				printf("What'sup!\n");
-			}
-			else if(strcmp(string3,"$sp")==0){
-				char temp1[3] = {'1', '0', '\0'};
-				reg2 = &temp1[0];
-				printf("What'sup!\n");
-			}
-			else if(strcmp(string3,"$ra")==0){
-				char temp1[3] = {'1', '1', '\0'};
-				reg2 = &temp1[0];
-				printf("What'sup!\n");
-			}
-			printf("reg1:%s reg2: %s ", reg1 ,reg2);
 			if(type == 'r')
 			{
-				printf("reg2: %s", reg2);
-				printf("result1: %s\n",result);
 				strncpy(result+4, reg2, 2);
-				printf("result2: %s\n",result);
 				strncpy(result+6, reg1, 2);
-				printf("result3: %s\n",result);
 			}
 			else if(type == 'i')
 			{
-				printf("Flag I \n");
+				//printf("Flag I \n");
 				int first, second;
 				//Convert immediate to binary
 				int num = atoi(string2);
@@ -206,6 +203,7 @@ int main()
 			}
 			else if(type == 'j')
 			{
+				
 				 int first, second, third, fourth, fifth;
 				//Convert immediate to binary
 				int num = atoi(string2); //-16 through 15
@@ -259,7 +257,7 @@ int main()
 		}
 		for (int k = 0; k < numOfGlobals; k++){
 			fprintf(outptr,"%s\n",globalVar[k]);
-			printf("%s\n",globalVar[k]);
+			//printf("%s\n",globalVar[k]);
 			counter++;
 		}
 		while (counter < 256){
@@ -271,5 +269,6 @@ int main()
 		
 	fclose(fp);
 	fclose(outptr);
+	printf("Finish assembling\n");
 	return 0;
 }

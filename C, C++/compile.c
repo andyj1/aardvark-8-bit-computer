@@ -23,18 +23,20 @@ int main(){
 	FILE *fptr;
 	FILE *outfptr;
 	char buf[1024];
+	char newNameBuf[255];
 	char newbuf[1024];
 	char *buffer[1024];
 	char *outbuf[1024];
 	int text = 0;
 	int data = 76;
-	
 	//open input and output file
-	printf("Enter an input file: ");
+	printf("Enter an input file: ");	
 	scanf("%s", buf);
+	printf("Enter an linker file name: ");
+	scanf("%s", newNameBuf);
 	printf("Starting to assemble...\n");
 	fptr = fopen(buf, "r+");
-	outfptr = fopen("linked.txt", "w");
+	outfptr = fopen(newNameBuf, "w");
 	
 	//error catching
 	if (!fptr){
@@ -121,7 +123,7 @@ int main(){
 	while (fgets(buf,1000, fptr)!=NULL && buf[1] != 't'){
 		
 	}
-
+	fprintf(outfptr, "%s", buf);
 	//go through file again and relabel the labels
 	//fputs(buf, outfptr);
 	int cur_loc = text;
@@ -136,7 +138,7 @@ int main(){
 			char buffy[20];
 			char rt[4] = {0,0,0,0};
 			char myByte[8];	//stores the Byte
-			printf("%s\n", buf);
+			//printf("%s\n", buf);
 			while (buf[j] != ' '){
 				j++;
 			}
@@ -212,10 +214,10 @@ int main(){
 				if (stillOK == 1){
 					int offset;
 					offset = instrLabellist[m].location - cur_loc ;
-					if (buf[0] = 'b'){
-						fprintf(outfptr, "beq %d ", offset);
+					if (buf[0] == 'b'){
+						fprintf(outfptr, "beq %d\n", offset);
 					}else{
-						fprintf(outfptr, "jal %d ", offset);
+						fprintf(outfptr, "jal %d\n", offset);
 					}
 					break;
 				}
@@ -236,7 +238,7 @@ int main(){
 					d++;
 				}
 				fputs(newbuf,outfptr);
-				printf("%s ", newbuf);
+				//printf("%s ", newbuf);
 			}else if(buf[a] == '\0'){
 				fputs(buf,outfptr);
 			}
