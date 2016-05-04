@@ -1,0 +1,34 @@
+00000101
+.text
+sl $sp $sp
+sl $sp $sp
+addi 1 $sp
+sl $sp $sp
+sl $sp $sp
+sl $sp $sp
+addi 1 $sp
+sl $sp $sp
+addi 1 $sp
+sl $sp $sp
+sl $sp $sp
+lw 0 $s1
+nand $sp $s2
+addi 1 $s2
+sw 0 $s1
+jal 2
+jal 15
+addi -2 $sp
+sw 0 $ra
+sw 1 $s1
+slt_0 $s1 $s2
+beq 3
+addi 2 $sp
+jr $ra
+addi -1 $s1
+jal -8
+lw 0 $ra
+lw 1 $s2
+addi 2 $sp
+add $s1 $s2
+jr $ra
+sw 0 $s1

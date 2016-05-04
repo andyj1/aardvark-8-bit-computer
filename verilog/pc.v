@@ -18,10 +18,11 @@ input wire [7:0] input1;
 output reg [7:0] output1; 	//8 bits of output
 
 //------------------Instructions-----------------------
-initial
+initial begin
 	output1 = 0;
-	
-always 
+end
+
+always @(input1)
 	output1 = input1;
-	
+
 endmodule

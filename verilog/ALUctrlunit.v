@@ -40,13 +40,16 @@ always @(~ALUop || ~funct) begin
 	end if ((ALUop == 3'b011) && (funct == 1)) begin
 		//sr
 		ALUctrlbits = 3'b101;
-	end if ((ALUop == 3'b101) && (funct == 0)) begin
+	end if ((ALUop == 3'b100) && (funct == 0)) begin
 		//addi 
 		ALUctrlbits = 3'b001; //same as add
 	end if (ALUop == 3'b101) begin
 		//beq
 		ALUctrlbits = 3'b110;
-	end 
+	end if (ALUop == 3'b111) begin
+		//lw or sw
+		ALUctrlbits = 3'b111;
+	end
 
 end
 

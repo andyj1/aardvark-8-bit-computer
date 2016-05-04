@@ -8,16 +8,18 @@
 
 `timescale 1ns / 1ns
 
-module ALUctrl(zero, result, ALUctrlbits, data1, data2);
+module ALUctrl(slt_reg, zero, result, ALUctrlbits, data1, data2, slt0_reg, slt1_reg);
 
 //-------------Input Ports-----------------------------
 input wire [2:0] ALUctrlbits;	//control bit from ALU control unit
 input wire [7:0] data1;			//8 bits of data1
 input wire [7:0] data2;			//8 bits of data2
+input wire slt0_reg, slt1_reg;	//check slt0_reg, slt1_reg from register file
 
 //-------------Output Ports----------------------------
 output reg [7:0] result; 	//8 bits of result
 output reg zero; 			//Gives 1 for jumping
+output reg slt_reg;			//to be fed into register file to write on slt0_reg or slt1_reg
 
 reg [7:0] save_msb;
 
@@ -36,38 +38,49 @@ initial begin
 	save_msb = 0;
 end
 
-always @ ALUctrlbits begin
-	if (ALUctrlbits == 3'b001) begin	//add
-		result = data1 + data2;
-	end 
-	if (ALUctrlbits == 3'b010) begin	//nand
-		result = ~(data1 & data2);
-	end 
-	if (ALUctrlbits == 3'b011) begin	//comparison
-		if (data1 > data2) begin
-			zero = 0;
+always @ ALUctrlbits 
+	begin
+		//general ALU computation for R types; result
+		if (ALUctrlbits == 3'b001) begin	//add
+			result = data1 + data2;
 		end 
-		if (data1 < data2) begin
-			zero = 1;
+		if (ALUctrlbits == 3'b010) begin	//nand
+			result = ~(data1 & data2);
 		end
-	end 
-	if (ALUctrlbits == 3'b100) begin	//shift left
-		result = data1 << 1;
-	end 
-	if (ALUctrlbits == 3'b101) begin	//shift right
-		if (data1 >= 8'b10000000) begin
-			save_msb = 8'b10000000;
-		end if (data1 < 8'b10000000) begin
-			save_msb = 8'b00000000;
+		if (ALUctrlbits == 3'b100) begin	//shift left
+			result = data1 << 1;
+		end 
+		if (ALUctrlbits == 3'b101) begin	//shift right
+			if (data1 >= 8'b10000000) begin
+				save_msb = 8'b10000000;
+			end if (data1 < 8'b10000000) begin
+				save_msb = 8'b00000000;
+			end
+			result = save_msb + (data1 >> 1);
+		end 
+		
+		//general calculation for I types; zero
+		if (ALUctrlbits == 3'b011) begin	//comparison
+			if (data1 > data2) begin
+				zero = 0;
+
+			end 
+			if (data1 < data2) begin
+				zero = 1;
+				slt_reg = 1;			
+			end
+		end 
+		if (ALUctrlbits == 3'b110) begin	//equality check
+			if((data1 == 1)&&(data2==1))
+				zero = 1;
 		end
-		result = save_msb + (data1 >> 1);
-	end 
-	if (ALUctrlbits == 3'b110) begin	//equality check
-		if (data1 == data2) begin
-			zero = 1;
+
+
+		//effective memory address calculation
+		if (ALUctrlbits == 3'b111) begin		//lw or sw
+			result = 8'b11111111 - (data1 + data2);
 		end
-	end 
-end
+	end
 
 
 endmodule

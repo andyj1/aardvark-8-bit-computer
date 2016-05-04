@@ -43,9 +43,11 @@ begin
 	ractrl = 0;
 	jalctrl = 0;
 
-	@(jctrlctrl) begin
-		jctrl = 1;
-	end
+	if(jctrlctrl) 
+		begin	//beq	
+			ALUop = 3'b101;
+			jctrl = 1;
+		end
 	
 	case(instructions)
 
@@ -74,11 +76,13 @@ begin
 				regWrite = 1;
 			end
 	4'b1000: begin	//lw
+				ALUop = 111;
 				memRead = 1;
 				memToReg = 2'b01;
 				regWrite = 1;
 			end
 	4'b1001: begin //sw
+				ALUop = 111;
 				memWrite = 1;
 			end
 	4'b1010: begin	//addi 
@@ -93,6 +97,7 @@ begin
 	4'b1100: begin	//beq	
 				ALUop = 3'b101;
 				jctrl = 1;
+				beqctrl = 1;
 			end
 	4'b1110: begin //jal
 				jctrl = 1;

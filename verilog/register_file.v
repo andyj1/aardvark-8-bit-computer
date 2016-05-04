@@ -8,7 +8,7 @@
 
 `timescale 1ns / 1ns
 
-module register_file (jctrlctrl, rt_data, rs_data, ra_addr, slt0_reg, slt1_reg, regWrite, beqctrl, jrctrl, rt_addr, rs_addr, dataToWrite);
+module register_file (jctrlctrl, rt_data, rs_data, ra_addr, slt0_reg, slt1_reg, regWrite, beqctrl, jrctrl, rt_addr, rs_addr, dataToWrite, slt_reg);
 
 input wire regWrite;
 input wire beqctrl;
@@ -16,6 +16,8 @@ input wire jrctrl;
 input wire [1:0] rt_addr;
 input wire [1:0] rs_addr;
 input wire [7:0] dataToWrite;
+input wire slt_reg;
+
 output reg jctrlctrl;
 output reg [7:0] rt_data;
 output reg [7:0] rs_data;
@@ -32,7 +34,7 @@ initial
 		address[0] = rt_addr;
 		address[1] = rs_addr;
 		slt0_reg = 0;
-		slt1_reg = 1;
+		slt1_reg = 0;
 		data_reg[3] = 0;
 		data_reg[2] = 0;
 		data_reg[1] = 0;
@@ -41,34 +43,39 @@ initial
 
 //Write
 always @(regWrite)
-	if(regWrite) 
 	begin
-		data_reg[address[1]] = dataToWrite;
+		if(dataToWrite)
+			data_reg[address[1]] = dataToWrite;		//rs_addr = address[1] = write register address
 	end
+	
+
 //SLT0/1 register value assignment
 always @(beqctrl)
 	begin
-		if(data_reg[address[0]] == data_reg[address[1]])
-		begin
-			slt0_reg = 1;
-			slt1_reg = 1;
-			jctrlctrl = 1;
-		//in Testbench, call ALU to compute equality check
-		end
+		if(rt_data < rs_data)
+			rt_data = slt_reg;
+		if(rt_data > rs_data)
+			rs_data = slt_reg;
+
+		rt_data = slt0_reg;
+		rs_data = slt1_reg;
+		//in Testbench, call *ALU (rt_data, rs_data)* to compute equality check
 	end
+
 
 //only when jr, output the fixed $ra address
 always @(jrctrl)
 	begin
 		assign ra_addr = 8'b10110011;
 	end
-	
+
 //when there is an input address, data reg at that input address = its dataReadReg
 always @(rt_addr || rs_addr)
 	begin
 		rt_data = data_reg[address[0]];
 		rs_data = data_reg[address[1]];
 	end
+
 
 	
 endmodule

@@ -20,11 +20,11 @@ input wire [7:0] input1;	//unput at 1
 output reg [7:0] output1; 	//8 bits of output
 
 //------------------Instructions-----------------------
-
-begin
-	if (ctrl == 0)
-		output1 = input0;
-	if (ctrl == 1) begin
-		output1 = input1;
-end
+always @(input0&&input1)
+	begin
+		if (ctrl == 0)
+			output1 = input0;
+		if (ctrl == 1)
+			output1 = input1;
+	end
 endmodule
