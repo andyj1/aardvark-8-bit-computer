@@ -6,4 +6,6 @@ compile.c is a C program to simiulate a linker, performing multiple functions:
 
 compile2.c converts linker file to binary file
 
+test.bin, test.cpp: sample test file to test the readmemb functionality of verilog
+
 multiplication.txt, multiplication_linker.txt, multiplication.bin : sample multiplication
