@@ -20,11 +20,11 @@ input wire input1;	//unput at 1
 output reg output1; 	
 
 //------------------Instructions-----------------------
-
-begin
-	if (ctrl == 0)
-		output1 = input0;
-	if (ctrl == 1) begin
-		output1 = input1;
-end
+always @(input0&&input1)
+	begin
+		if (ctrl == 0)
+			output1 = input0;
+		if (ctrl == 1)
+			output1 = input1;
+	end
 endmodule

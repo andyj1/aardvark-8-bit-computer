@@ -21,14 +21,15 @@ input wire [7:0] input2;	//input at 2
 output reg [7:0] output1; 	//8 bits of output
 
 //------------------Instructions-----------------------
-always
+always @(input0&&input1&&input2)
 	begin
 		case(ctrl)
 		2'b00:
 			output1 = input0;
 		2'b01:
-			output1 = inpu1;
+			output1 = input1;
 		2'b10:
 			output1 = input2;
+		endcase
 	end
 endmodule
