@@ -1,0 +1,10 @@
+.data 
+.byte num1 1
+.byte num2 2
+.text
+la $sp num1
+lw 0 $s0
+lw -1 $s1
+nand $sp $ra
+add $s1 $s2
+sw 0 $s1

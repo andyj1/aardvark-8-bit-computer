@@ -32,7 +32,7 @@ int main(){
 	//open input and output file
 	printf("Enter an input file: ");
 	scanf("%s", buf);
-	printf("Starting to compile...\n");
+	printf("Starting to assemble...\n");
 	fptr = fopen(buf, "r+");
 	outfptr = fopen("linked.txt", "w");
 	
@@ -50,7 +50,7 @@ int main(){
 	fgets(buf, 1000, fptr);
 	while (fgets(buf,1000, fptr)!=NULL && buf[1] != 't'){
 		
-		char numberbuf[3];
+		char numberbuf[3] = {0};
 		int j = 1; //goes through the buffer
 		int k = 0;
 		while (buf[j] != ' '){
@@ -71,21 +71,32 @@ int main(){
 		j += 1;
 		k = 0;
 		
-		while (buf[j] != '\0'){
+		while (buf[j] <= 57 && buf[j] >= 48 && k < 3){
 			//stores the actual value
+			//printf("%d\n", buf[j]);
 			numberbuf[k] = buf[j];
+			//printf("%d\n", k);
 			k++;
 			j++;
 		}
+		//printf("Hello!");
 		
-		int val = atoi(numberbuf);
+		int val = 0;
+		//printf("%s\n", numberbuf);
+		int m = 0;
+		while(numberbuf[m] != 0){
+			val *=10;
+			val += numberbuf[m] - '0';
+			//printf("%d %d\n",numberbuf[m], val);
+			m ++;
+		}		
 		int dec_val_beg = val/16;
 		int dec_val_end = val%16;
 		int dec_loc_beg = (data+i)/16;
 		int dec_loc_end = (data+i)%16;
 		sprintf(labellist[i].location,"%s%s",bit_rep[dec_loc_beg],bit_rep[dec_loc_end]);
 		sprintf(labellist[i].actualVal,"%s%s",bit_rep[dec_val_beg],bit_rep[dec_val_end]);
-		fprintf(outfptr,"%s %s\n", labellist[i].location, labellist[i].actualVal);
+		fprintf(outfptr,"%s\n", labellist[i].actualVal);
 		
 		i++;
 	}
@@ -112,7 +123,7 @@ int main(){
 	}
 
 	//go through file again and relabel the labels
-	fputs(buf, outfptr);
+	//fputs(buf, outfptr);
 	int cur_loc = text;
 	while (fgets(buf,1000, fptr)!=NULL){
 		
@@ -123,23 +134,25 @@ int main(){
 			int k = 0;
 			int stillOK = 1;
 			char buffy[20];
-			char rt[3];
+			char rt[4] = {0,0,0,0};
 			char myByte[8];	//stores the Byte
-			
+			printf("%s\n", buf);
 			while (buf[j] != ' '){
 				j++;
 			}
 			j += 1;
 			
-			while (buf[j] != ','){
+			while (buf[j] != ' '&& k < 3){
+				//printf("%c\n", rt[j]);
 				rt[k] = buf[j];
 				k++;
 				j++;
 			}
-			j += 2;
+			//printf("%s\n", rt);
+			j += 1;
 			k = 0;
 			
-			while (buf[j] != '\0'){
+			while (buf[j] != '\0'||k<3){
 				//stores the actual value
 				buffy[k] = buf[j];
 				k++;
@@ -162,9 +175,9 @@ int main(){
 						myByte[g] = (labellist[m].location)[g];
 					}
 					for (int m = 0; m < 8; m++){
-						fprintf(outfptr,"sl %s\n", rt);
+						fprintf(outfptr,"sl %s %s\n", rt,rt);
 						if (myByte[m] == '1'){
-							fprintf(outfptr,"addi %s, 1\n", rt);
+							fprintf(outfptr,"addi %s 1\n", rt);
 						}
 					}
 					break;
@@ -200,9 +213,9 @@ int main(){
 					int offset;
 					offset = instrLabellist[m].location - cur_loc ;
 					if (buf[0] = 'b'){
-						fprintf(outfptr, "beq %d", offset);
+						fprintf(outfptr, "beq %d ", offset);
 					}else{
-						fprintf(outfptr, "jal %d", offset);
+						fprintf(outfptr, "jal %d ", offset);
 					}
 					break;
 				}
@@ -223,7 +236,7 @@ int main(){
 					d++;
 				}
 				fputs(newbuf,outfptr);
-				printf("%s", newbuf);
+				printf("%s ", newbuf);
 			}else if(buf[a] == '\0'){
 				fputs(buf,outfptr);
 			}
@@ -233,7 +246,7 @@ int main(){
 	
 	fclose(fptr);
 	fclose(outfptr);
-	printf("Finish compiling\n");
+	printf("Finish assembling\n");
 	//spit out an output file
 	return 0;
 }
