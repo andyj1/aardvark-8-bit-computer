@@ -8,23 +8,27 @@
 
 `timescale 1ns / 1ns
 
-module pc(clk , input1, output1 , reset);
+module pc_tb;
 
 //-------------Input Ports-----------------------------
-input wire reset;
-input [7:0] input1;
-input clk;
+reg [7:0] input1;
+reg reset;
+reg clk;
 //-------------Output Ports----------------------------
-output reg [7:0] output1; 	//8 bits of output
+
+wire [7:0] output1; 	//8 bits of output
 
 //------------------Instructions-----------------------
+always
+	#1 clk = ~clk;
+initial begin
+	clk = 1;
+	reset = 0;
+	input1 = 8'b00010001;
+	$monitor("%b", output1);
 
-always @(posedge clk) 
-	begin
-		if(!reset)
-			output1 = input1;
-		else	
-			output1 = 8'b00000000;
-	end
+	#10 $finish;
+end
+
+pc pc(clk, input1,output1,reset);
 endmodule
-
