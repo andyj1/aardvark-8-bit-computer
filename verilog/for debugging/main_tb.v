@@ -131,8 +131,3 @@ and a1(beqSatisfied, zero, beqctrl);
 
 
 endmodule
-
-
-
-
-
