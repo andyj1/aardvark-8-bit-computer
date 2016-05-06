@@ -2,31 +2,33 @@
 // Created by: Team Aardvark
 // Course: Cooper Union ECE151A Spring 2016
 // Professor: Professor Marano
-// Module Name: 
-// Description: 
+// Module Name: Addition.v
+// Description: Adding 1 to PC to increment it
 //////////////////////////////////////////////////////////////////////////////////
 
 `timescale 1ns / 1ns
 
-module signext_2to8 (dataout,datain);
+module Addition(pc_in, pc_out, immediate);
 
 //-------------Input Ports-----------------------------
-input wire [1:0] datain;	//input 
-
+input wire [7:0] pc_in;			//8 bits of data1
+input wire [7:0] immediate;
 //-------------Output Ports----------------------------
-output reg [7:0] dataout; 	//8 bits of output
-
-//-------------Intermediate Ports Data Type-------------
-reg [6:0] sign;
+output reg [7:0] pc_out; 	//8 bits of result
 
 //------------------Instructions-----------------------
-always @ datain
-	begin
-		if (datain >= 2'b10) begin
-			sign = 6'b111111;
-		end if (datain < 2'b10) begin
-			sign = 6'b000000;
-		end
-		dataout = {sign,datain};
-	end
+
+// 001: add
+// 010: nand
+// 011: comparison
+// 100: shift left
+// 101: shift right
+// 110: equal
+
+always @(pc_in)
+begin
+	pc_out = pc_in + immediate;
+end
+
+
 endmodule

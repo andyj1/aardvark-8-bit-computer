@@ -12,12 +12,12 @@ module mux2_1_ctrl1_in2(output1, input0, input1, ctrl);
 
 //-------------Input Ports-----------------------------
 input wire ctrl;		
-input wire [1:0] input0;	//input at 0
-input wire [1:0] input1;	//unput at 1
+input wire [7:0] input0;	//input at 0
+input wire [7:0] input1;	//unput at 1
 
 //-------------Output Ports----------------------------
 
-output reg [1:0] output1; 	
+output reg [7:0] output1; 	
 
 //------------------Instructions-----------------------
 always @*

@@ -31,7 +31,7 @@ parameter INSTRUCTIONS = "./test.bin";
 initial 
 	begin
 		$readmemb(INSTRUCTIONS, MDR);  
-		readData = 0;
+		//readData = 0;
 
 	end
 

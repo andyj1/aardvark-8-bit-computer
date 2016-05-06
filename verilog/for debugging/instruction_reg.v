@@ -38,8 +38,8 @@ always @ instruction_input
 		jump_opcode_check <= instruction_input[7:6];
 		funct <= instruction_input[4];
 		instruction_to_control_unit <= instruction_input[7:5];
-		rt <= instruction_input [1:0];
-		rs <= instruction_input [3:2];
+		rt <= instruction_input [3:2];
+		rs <= instruction_input [1:0];
 		i_immediate <= instruction_input [3:2];
 	end
 

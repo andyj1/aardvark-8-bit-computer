@@ -34,7 +34,7 @@ int main()
 	}else{
 		while(fgets(buff, 255, (FILE*)fp) != NULL){
 			
-			//printf("%s",buff);
+			printf("%s",buff);
 			char *instr = "0000";
 			char *string2 = "00";
 			char *string3 = "00";
@@ -50,8 +50,10 @@ int main()
 			}
 			if( token != NULL)
 			{
-				token = strtok(NULL, s);
-				string3 = token;
+				if (buff[0] != 'j'){
+					token = strtok(NULL, s);
+					string3 = token;
+				}
 			}
 			char address[] = "00000000";
 			//char instr[] = "and";
@@ -136,6 +138,7 @@ int main()
 			//Setting registers to binary
 			char * reg1;
 			char * reg2;
+			printf("type: %c\n", type);
 			if (string2[0] == '$' && string3[0] == '$'){
 				if(strcmp(string2,"$s1")==0){
 					char temp[3] = {'0', '0', '\0'};
@@ -248,7 +251,9 @@ int main()
 				}
 				n = n+1;
 			}
+			printf("%s\n", result);
 			fprintf(outptr, "%s\n", result);
+			
 			counter++;
 		}
 		while (counter < 76){

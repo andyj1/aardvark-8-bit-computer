@@ -3,13 +3,13 @@
 .text
 sl $sp $sp
 sl $sp $sp
-addi $sp 1
+addi 1 $sp
 sl $sp $sp
 sl $sp $sp
 sl $sp $sp
-addi $sp 1
+addi 1 $sp
 sl $sp $sp
-addi $sp 1
+addi 1 $sp
 sl $sp $sp
 sl $sp $sp
 lw 0 $s1
@@ -20,7 +20,7 @@ lw -1 $s1
 addi -1 $sp 
 jal 4
 lw 1 $s2	
-÷add $s1 $s2
+add $s1 $s2
 lw 0 $s2
 addi -1 $s2
 sw 0 $s2

@@ -8,7 +8,7 @@
 
 `timescale 1ns / 1ns
 
-module ALUctrl(slt_reg, zero, result, ALUctrlbits, data1, data2);
+module ALUctrl(zero, result, ALUctrlbits, data1, data2);
 
 //-------------Input Ports-----------------------------
 input wire [2:0] ALUctrlbits;	//control bit from ALU control unit
@@ -36,12 +36,13 @@ initial begin
 	result = 0;
 	zero = 0;
 	save_msb = 0;
-	slt_reg = 0;
 end
 
 always @*  
 	begin
 		//general ALU computation for R types; result
+		result = 0;
+		zero = 0;
 		if (ALUctrlbits == 3'b001) begin	//add
 			result = data1 + data2;
 		end 
@@ -61,19 +62,19 @@ always @*
 		end 
 		
 		//general calculation for I types; zero
-		if (ALUctrlbits == 3'b011) begin	//comparison
+		if (ALUctrlbits == 3'b011) begin	//slt_0 and slt_1
 			if (data1 > data2) begin
-				zero = 0;
-
-			end 
-			if (data1 < data2) begin
-				zero = 1;
-				slt_reg = 1;			
+				result = 8'b11111111;
+			end else begin
+				result = 8'b00000000;		
 			end
 		end 
-		if (ALUctrlbits == 3'b110) begin	//equality check
-			if((data1 == 1)&&(data2==1))
+		if (ALUctrlbits == 3'b110) begin	//beq
+			if(data1 == data2) begin
 				zero = 1;
+			end else begin
+				zero = 0;
+			end
 		end
 
 

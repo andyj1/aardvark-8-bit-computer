@@ -179,7 +179,7 @@ int main(){
 					for (int m = 0; m < 8; m++){
 						fprintf(outfptr,"sl %s %s\n", rt,rt);
 						if (myByte[m] == '1'){
-							fprintf(outfptr,"addi %s 1\n", rt);
+							fprintf(outfptr,"addi 1 %s\n", rt);
 						}
 					}
 					break;

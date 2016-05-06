@@ -12,8 +12,7 @@ module memory(instructions, readData, pc, memWrite, memRead, input_addr, dataMem
 
 //fetch
 input wire [7:0] pc;
-
-output wire [7:0] instructions;
+output reg [7:0] instructions;
 
 //store
 input wire memWrite, memRead;
@@ -21,19 +20,18 @@ input wire [7:0] input_addr;	//address of memory where dataMemWrite will be writ
 input wire [7:0] dataMemWrite;	//data to be written onto memory
 output reg [7:0] readData;		//data of the memory at the specified address
 
-reg [7:0] MDR [255:0];		//8 bit wide, 256 address deep register memory
-
-parameter INSTRUCTIONS = "test.bin";
+reg [7:0] MDR [0:255];		//8 bit wide, 256 address deep register memory
 
 initial 
 	begin
-		$readmemb(INSTRUCTIONS, MDR);  
-		
+		$readmemb("multiplication.bin", MDR); 
 		readData = 8'b0;
 	end
 //fetch
-	assign instructions  = MDR[pc];
-
+always @(pc)
+	begin
+		instructions  = MDR[pc];
+	end
 //store
 always @ (memRead)
 	begin

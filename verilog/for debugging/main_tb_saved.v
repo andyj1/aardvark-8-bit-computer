@@ -83,34 +83,28 @@ module main_tb ();
 reg clk;
 //------------------Instructions-----------------------
 
-always 
+always begin
 	#1 clk = ~clk;
-
+	end
 initial 
 	begin
-		clk = 1'b0;	
+		$monitor("time: %d\n pc_addr_out: %b \n pc_addr_in: %b \ninstruction_input:%b\n",$time, pc_addr_out, pc_addr_in, instruction_input);
+		clk = 0;	
 		ra_address = 2'b11;
 		zero = 0;
 		dataToWrite = 0;
-		pc_addr_in = 8'b00000001;
+		pc_addr_in = 8'b00000000;
 		jump_opcode_check_alu_input = 8'b11111111;
 		alu_ctrl_result = 8'b00001001;
-
-		//$display($time, "<<starting the simultation>>");
-		
-		$monitor("instruction_input:%b\nj_immediate_8=%b\njump_opcode_check_8=%b\nfunct=%b\ninstruction_to_control_unit_3=%b\nrt=%b\nrs=%b\ni_immediate=%b\nalu1_zero:%b\nfunct_input_ctrl_unit:%b\njctrl=%b\njrctrl=%b\nmemWrite=%b\nmemRead=%b\nmemToReg=%b\nALUop=%b\nALUsrc=%b\nregWrite=%b\nbeqctrl=%b\nractrl=%b\njctrlctrl:%b\ninst1:%b\ninst2:%b\nrs_write_addr:%b\nrt_data:%b\nrs_data:%b\ndataToWrite:%b\nslt_reg:%b\nrt_addr_8:%b\nalu_ctrl_in_8:%b\nALUctrlbits:%b\nslt_reg:%b\naluctrl_zero:%b\naluctrl_result:%b\n", instruction_input,j_immediate_8, jump_opcode_check_8, funct,instruction_to_control_unit_3, rt_addr, rs_addr, i_immediate_2, alu1_zero,funct_input_ctrl_unit,jctrl, jrctrl,memWrite,memRead,memToReg,ALUop,ALUsrc,regWrite,beqctrl,ractrl,jctrlctrl, instruction_to_control_unit_3, funct,rs_write_addr,rt_data, rs_data,dataToWrite,slt_reg,rt_addr_8,alu_ctrl_in_8, ALUctrlbits, slt_reg, aluctrl_zero, aluctrl_result);
-
-		//$display($time, "<<finishing the simulation>>");
-		
+		#5 display("time: %d\n pc_addr_out: %b \n pc_addr_in: %b \ninstruction_input:%b\n",$time, pc_addr_out, pc_addr_in, instruction_input);
+		$display($time, "<<starting the simultation>>");
 		#100 $finish;
+		$display($time, "<<finishing the simulation>>");
 	end
 
-pc pc(pc_addr_out, pc_addr_in);
-
-
+pc pc(pc_addr_out, pc_addr_in, clk);
 
 memory mem(instruction_input, readData, pc_addr_out, memWrite, memRead, alu_ctrl_result, rs_data);
-
 instruction_reg instreg(j_immediate_5,jump_opcode_check_2, instruction_to_control_unit_3, rt_addr, rs_addr, i_immediate_2, funct, instruction_input);
 
 signext_5to8 ext1(j_immediate_8, j_immediate_5);

@@ -21,7 +21,7 @@ output reg [2:0] ALUctrlbits;
 initial
 	ALUctrlbits = 3'b000;
 
-always @(~ALUop || ~funct) begin
+always @* begin
 	if ((ALUop == 3'b000) && (funct == 1)) begin
 		//add
 		ALUctrlbits = 3'b001;
