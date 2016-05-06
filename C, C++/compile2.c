@@ -36,8 +36,8 @@ int main()
 			
 			printf("%s",buff);
 			char *instr = "0000";
-			char *string2 = "00";
-			char *string3 = "00";
+			char *string2 = "000";
+			char *string3 = "000";
 			/* get the first token */
 			token = strtok(buff, s);
 			if( token != NULL){
@@ -61,7 +61,7 @@ int main()
 			//char string3[] = "$s2";
 			char result[] = "00000000";
 			char type;
-			//printf("Instruction:%s Reg One:%s  Reg 2:%s \n", instr, string2, string3);
+			printf("Instruction:%s Reg One:%s  Reg 2:%s \n", instr, string2, string3);
 			if(strcmp(instr, "and")==0)
 			{
 				//printf("Flag one");
@@ -136,46 +136,51 @@ int main()
 				strncpy(result, opcode, 8);
 			}
 			//Setting registers to binary
-			char * reg1;
-			char * reg2;
+			char reg1[3];
+			char reg2[3];
 			printf("type: %c\n", type);
-			if (string2[0] == '$' && string3[0] == '$'){
+			printf("Hello!\n");
+			if (string2[0] == '$'){
 				if(strcmp(string2,"$s1")==0){
-					char temp[3] = {'0', '0', '\0'};
-					reg1 = &temp[0];
+					reg1[0] = '0';
+					reg1[1] = '0'; 
 				}
 				else if(strcmp(string2,"$s2")==0){
-					char temp[3] = {'0', '1', '\0'};
-					reg1 = &temp[0];
+					reg1[0] = '0';
+					reg1[1] = '1'; 
 				}
 				else if(strcmp(string2,"$sp")==0){
-					char temp[3]  = {'1', '0', '\0'};
-					reg1 = &temp[0];
+					reg1[0] = '1';
+					reg1[1] = '0'; 
 				}
 				else if(strcmp(string2,"$ra")==0){
-					char temp[3] = {'1', '1', '\0'};
-					reg1 = &temp[0];
-				}
-				//Same for reg2
-				if(strcmp(string3,"$s1")==0){
-					char temp1[3] = {'0', '0', '\0'};
-					reg2 = &temp1[0];
-				}
-				else if(strcmp(string3,"$s2")==0){
-					char temp1[3] = {'0', '1', '\0'};
-					reg2 = &temp1[0];
-				}
-				else if(strcmp(string3,"$sp")==0){
-					char temp1[3] = {'1', '0', '\0'};
-					reg2 = &temp1[0];
-				}
-				else if(strcmp(string3,"$ra")==0){
-					char temp1[3] = {'1', '1', '\0'};
-					reg2 = &temp1[0];
+					reg1[0] = '1';
+					reg1[1] = '1'; 
 				}
 			}
+			if  (string3[0] == '$'){
+				//Same for reg2
+				if(strcmp(string3,"$s1")==0){
+					reg2[0] = '0';
+					reg2[1] = '0'; 
+				}
+				else if(strcmp(string3,"$s2")==0){
+					reg2[0] = '0';
+					reg2[1] = '1'; 
+				}
+				else if(strcmp(string3,"$sp")==0){
+					reg2[0] = '1';
+					reg2[1] = '0'; 
+				}
+				else if(strcmp(string3,"$ra")==0){
+					reg2[0] = '1';
+					reg2[1] = '1'; 
+				}
+			}
+			
 			if(type == 'r')
 			{
+				printf("reg1: %s reg2: %s", reg1, reg2);
 				strncpy(result+4, reg2, 2);
 				strncpy(result+6, reg1, 2);
 			}
@@ -191,16 +196,15 @@ int main()
 				{
 					first = 1;
 				}
-				if(num%1==1){
+				if(num%2==1){
 					second = 1;
 				}
 				char a = first +'0';
 				char b = second +'0';
 				char answer[3] = {a, b, '\0'};
-				//printf("Result 4 %s \n", result);
+				printf("Answer: %s\n", answer);
 				strncpy(result+4, answer, 2);
-				//printf("Result 6 %s \n", result);
-				//printf("Reg1: %s Reg2: %s", reg1, reg2);
+				printf("Reg2: %s\n", reg2);
 				strncpy(result+6, reg2, 2);
 				//printf("End Flag I \n");
 			}
@@ -210,6 +214,7 @@ int main()
 				 int first, second, third, fourth, fifth;
 				//Convert immediate to binary
 				int num = atoi(string2); //-16 through 15
+				printf("NUM: %d \n", num);
 				first = second = third = fourth = fifth = 0;
 				if(num < 0)
 				{

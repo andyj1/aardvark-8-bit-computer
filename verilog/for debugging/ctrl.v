@@ -28,6 +28,7 @@ output reg beqctrl;
 output reg ractrl;
 output reg jalctrl;
 output reg [1:0]sltctrl;	//see whether the control is slt_0 or slt_1
+output reg [1:0]nextctrl;
 
 output reg [3:0] instructions;
 
@@ -46,6 +47,7 @@ initial
 		ractrl = 0;
 		jalctrl = 0;
 		sltctrl = 0;
+		nextctrl = 2'b00;
 		instructions = {inst1,inst2};
 	end
 always @*
@@ -69,6 +71,7 @@ begin
 			ractrl = 0;
 			jalctrl = 0;
 			sltctrl = 0;
+			nextctrl = 2'b00;
 	end 
 	4'b0011: begin	//nand
 				$display("nand");
@@ -85,6 +88,7 @@ begin
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
+				nextctrl = 2'b00;
 			end
 	4'b0100: begin	//slt_0
 				$display("slt_0");
@@ -101,6 +105,7 @@ begin
 				beqctrl = 0;
 				ractrl = 0;
 				jalctrl = 0;
+				nextctrl = 2'b00;
 			end
 	4'b0101: begin	//slt_1
 				$display("slt_1");
@@ -117,6 +122,7 @@ begin
 				beqctrl = 0;
 				ractrl = 0;
 				jalctrl = 0;
+				nextctrl = 2'b00;
 			end
 	4'b0110: begin	//sl
 				$display("sl");
@@ -133,6 +139,7 @@ begin
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;	
+				nextctrl = 2'b00;
 			end
 	4'b0111: begin	//sr
 				$display("sr");
@@ -149,6 +156,7 @@ begin
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
+				nextctrl = 2'b00;
 			end
 	4'b1000: begin	//lw
 				$display("lw");
@@ -165,6 +173,7 @@ begin
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
+				nextctrl = 2'b01;
 			end
 	4'b1001: begin //sw
 				$display("sw");
@@ -181,6 +190,7 @@ begin
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
+				nextctrl = 2'b01;
 			end
 	4'b1010: begin	//addi 
 				$display("addi");
@@ -197,6 +207,7 @@ begin
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
+				nextctrl = 2'b00;
 			end
 	4'b1011: begin	//jr
 				$display("jr");
@@ -213,6 +224,7 @@ begin
 				beqctrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
+				nextctrl = 2'b00;
 			end
 	4'b1100: begin	//beq	
 				$display("beq");
@@ -229,6 +241,7 @@ begin
 				regWrite = 0;
 				ractrl = 0;
 				sltctrl = 0;
+				nextctrl = 2'b00;
 			end
 	4'b1110: begin //jal
 				$display("jal");
@@ -245,6 +258,7 @@ begin
 				beqctrl = 0;
 				ractrl = 0;
 				sltctrl = 0;
+				nextctrl = 2'b10;
 			end
 	default: begin
 				$display("default");
@@ -258,6 +272,7 @@ begin
 				regWrite = 0;
 				beqctrl = 0;
 				ractrl = 0;
+				nextctrl = 2'b00;
 			end
 	endcase
 			
