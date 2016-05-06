@@ -130,7 +130,7 @@ mux3_1 ctrlnextpc(pcAddrNext, pcAddrOut, rsData, pcAddrImm, nextctrl);
 
 mux2_1_ctrl1_out1 ctrljalMUX(jalAddr, pcAddrOut, pcAddrImm, jalctrl);		//choose between jal and pc+1
 mux2_1_ctrl1_out1 ctrljrMUX(jrAddr, jalAddr, rsAddr, jrctrl);			//choose between jr $ra and whatever comes from from ctrljalMUX
-and (beqSatisfied, beqctrl, zero);						//see whether conditions of beq is satisfied, with beqctrl and zero from ALU
-mux2_1_ctrl1_out1 ctrlbeqMUX(pcFinalOut, pcAddrOut,jrAddr, beqSatisfied);		//choose between beq relative address and whatever comes out from ctrljrMUX
+and (beqSatisfied, beqctrl, beqDecision);						//see whether conditions of beq is satisfied, with beqctrl and zero from ALU
+mux2_1_ctrl1_out1 ctrlbeqMUX(pcFinalOut, jrAddr, pcAddrOut, beqSatisfied);		//choose between beq relative address and whatever comes out from ctrljrMUX
 
 endmodule
