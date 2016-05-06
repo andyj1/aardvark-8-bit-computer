@@ -34,7 +34,8 @@ wire [7:0] rs_data;		//Data from rs that goes into ALU
 wire [2:0] ALUctrlbits;		//ALU control 
 wire beqDecision;		//branching decision
 wire [7:0] ALUresult;		//results from calculation of main ALU
-wire beqSatisfied;
+wire [7:0] jalAddr;
+wire [7:0] jrAddr;
 
 //DECODER
 wire [7:0] readData;		//data read from instruction memory, currently unused
@@ -126,8 +127,10 @@ mux2_1_ctrl1_in2 ctrlImm(finalToALU, rtData, iImmext, ALUsrc);			//choose betwee
 mux2_1_ctrl1_out1 ctrlJR(rsWriteAddr, rsAddr, returnAddr, ractrl);		//choose between ra and rsAddr
 mux3_1 ctrlwb(dataToWrite, ALUresult, readData, pcAddrIn, memToReg);		//choose between memory, ALU and PC to writeback to regFile
 mux3_1 ctrlnextpc(pcAddrNext, pcAddrOut, rsData, pcAddrImm, nextctrl);
-ALUctrlunit aluctrlunit(ALUctrlbits, ALUOp, funct);		//Controls ALU
-and a1(beqSatisfied, zero, beqctrl);
 
+mux2_1_ctrl1_out1 ctrljalMUX(jalAddr, pcAddrOut, pcAddrImm, jalctrl);		//choose between jal and pc+1
+mux2_1_ctrl1_out1 ctrljrMUX(jrAddr, jalAddr, rsAddr, jrctrl);			//choose between jr $ra and whatever comes from from ctrljalMUX
+and (beqSatisfied, beqctrl, zero);						//see whether conditions of beq is satisfied, with beqctrl and zero from ALU
+mux2_1_ctrl1_out1 ctrlbeqMUX(pcFinalOut, pcAddrOut,jrAddr, beqSatisfied);		//choose between beq relative address and whatever comes out from ctrljrMUX
 
 endmodule
