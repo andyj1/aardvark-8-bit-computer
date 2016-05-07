@@ -12,8 +12,8 @@ module ALUctrl(zero, result, slt_reg, ALUctrlbits, data1, data2,clk);
 
 //-------------Input Ports-----------------------------
 input wire [2:0] ALUctrlbits;	//control bit from ALU control unit
-input wire [7:0] data1;			//8 bits of data1
-input wire [7:0] data2;			//8 bits of data2
+input wire signed [7:0] data1;			//8 bits of data1
+input wire signed [7:0] data2;			//8 bits of data2
 input wire clk;
 //input wire slt0_reg, slt1_reg;	//check slt0_reg, slt1_reg from register file
 
@@ -76,6 +76,7 @@ always @*
 			end else begin
 				zero = 0;
 			end
+			//$display("data1: %b data2: %b zero: %b", data1, data2, zero);
 		end
 
 

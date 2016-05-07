@@ -25,7 +25,7 @@ output reg [7:0] out; 	//8 bits of result
 // 101: shift right
 // 110: equal
 
-always @(in)
+always @*
 begin
 	out = in + immediate;
 end

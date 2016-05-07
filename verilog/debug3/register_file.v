@@ -8,7 +8,7 @@
 
 `timescale 1ns / 1ns
 
-module register_file (rt_data, rs_data, s0_data, s1_data, sp_data, ra_data, regWrite, beqctrl, jrctrl, ALUsrc, rt_addr, rs_addr, dataToWrite, slt_reg, rs_write_addr, clk);
+module register_file (rt_data, rs_data, s0_data, s1_data, sp_data, ra_data, regWrite, beqctrl, jrctrl, memctrl, ALUsrc, rt_addr, rs_addr, dataToWrite, slt_reg, rs_write_addr, clk);
 
 input wire regWrite;
 input wire beqctrl;
@@ -19,6 +19,7 @@ input wire [1:0] rs_addr;
 input wire [7:0] dataToWrite;
 input wire [1:0] slt_reg;	
 input wire [1:0] rs_write_addr;
+input wire memctrl;
 
 output reg [7:0] rt_data;
 output reg [7:0] rs_data;
@@ -67,28 +68,36 @@ always @(posedge clk)
 			//rs_data = data_reg[rs_addr];
 			if (jrctrl == 1) begin					//jrctrl = 1 for JR type
 				rs_data = data_reg[rs_write_addr];	//when jrctrl, rs_write_addr = 11 (addr of $ra)
-			end if (ALUsrc == 1) begin				//ALUsrc = 1 for I type
-				rs_data = data_reg[2]; 				//rs_data holds the data of $sp
 			end else begin
 				rs_data = data_reg[rs_addr];
 			end
 		end 
+		if (memctrl == 1) begin
+
+			rt_data = data_reg[rs_addr];
+			//$display("rt_data in regfile: %b", rt_data);
+			rs_data = data_reg[2];		
+		
+		end
 		if (regWrite == 1) 
 			#1
 			begin
 				if (slt_reg == 2'b10) begin
 					t0 = dataToWrite;
+					//$display("t0: %b t1: %b", t0, t1);
 				end if (slt_reg == 2'b11) begin
 					t1 = dataToWrite;
-				end if (beqctrl == 1) begin
-					//$display("Hello!");
-					rt_data = t0;
-					rs_data = t1;
-				end else begin
+				end if(slt_reg == 2'b00 || slt_reg == 2'b01) begin
 					data_reg[rs_write_addr] = dataToWrite;
+					//$display("Hello!");
 				end
 
 			end
+		if (beqctrl == 1) begin
+			//$display("Hello!");
+			rt_data = t0;
+			rs_data = t1;
+		end
 	end
 always @*
 begin

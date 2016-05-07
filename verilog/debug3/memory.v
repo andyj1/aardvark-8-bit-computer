@@ -27,20 +27,13 @@ initial
 		$readmemb("test.bin", MDR); 
 		readData = 0;
 	end
-//fetch
 always @*
 	begin
 		instructions  = MDR[pc];
-		
+		if (memRead == 1) begin
+			readData = MDR[input_addr]; //load word at the specified address
+		end if (memWrite == 1) begin
+			MDR[input_addr] = dataMemWrite;
+		end
 	end
-//store
-always @ (memRead)
-	begin
-		readData = MDR[input_addr]; //load word at the specified address
-	end
-always @ (memWrite)
-	begin
-		MDR[input_addr] = dataMemWrite;
-	end
-
 endmodule

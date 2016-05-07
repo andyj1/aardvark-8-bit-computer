@@ -85,6 +85,7 @@ wire beqctrl;				//control for beq
 wire ractrl;				//control for choosing between ra and rs
 wire jalctrl;				//control choosing between PC and PC+immediate for jal
 wire [1:0]sltCtrl;			//control for slt_0 and slt_1
+wire memctrl;
 
 //REGISTERS
 reg clk;
@@ -109,14 +110,14 @@ initial
 		//pcAddrIn = 8'b00000000;
 		returnAddr = 2'b11;
 		#2 reset = 0;
-		//$monitor("pc: %b instruction: %b", pcAddrOut, instruction);
-		$monitor("pc: %b instruction: %b sp: %b ALUresult: %b dataToWrite: %b s0: %b s1: %b", pcAddrOut, instruction, sp_data, ALUresult, dataToWrite, s0_data, s1_data);	
-		#30 $finish;
+		$monitor("time: %g \t pc: %d instruction: %b s0_data: %b s1_data: %b sp_data: %b ", $time, pcAddrOut,instruction,s0_data, s1_data, sp_data);
+	
+		#100 $finish;
 	end
 
 
 //Main PC counter						
-pc mainPC(clk , pcFinalOut, pcAddrOut , reset); 
+pc mainPC(clk , pcFinalOut, pcAddrOut , reset, instruction); 
 //INPUT: pcAddrIn
 //OUTPUT: pcAddrOut 
 
@@ -163,13 +164,13 @@ mux2_1_ctrl1_out1 ctrlJR(rsWriteAddr, rsAddr, returnAddr, ractrl);		//choose bet
 //CONTROL: ractrl
 
 //---------------------------------------------------------------------------
-ctrl mainCtrl(jctrl, jrctrl, memWrite, memRead, memToReg, ALUOp, ALUsrc, nextctrl, regWrite, beqctrl, ractrl, jalctrl, sltCtrl, inst2CtrlUnit, muxJumpFlag);
+ctrl mainCtrl(jctrl, jrctrl, memWrite, memRead, memToReg, ALUOp, ALUsrc, nextctrl, regWrite, beqctrl, ractrl, jalctrl, sltCtrl, memctrl, inst2CtrlUnit, muxJumpFlag);
 //INPUT: inst2CtrlUnit, muxJumpFlag(== funct if R or I type)
 //OUTPUT: jctrl, jrctrl, memWrite, memRead, memToReg, ALUOp, ALUsrc, nextctrl, regWrite, beqctrl, ractrl, jalctrl, sltCtrl
 
 //---------------------------------------------------------------------------
 //Register File		
-register_file mainRegfile(rtData, rsData, s0_data, s1_data, sp_data, ra_data, regWrite, beqctrl, jrctrl, ALUsrc, rtAddr, rsAddr, dataToWrite, sltCtrl, rsWriteAddr, clk);
+register_file mainRegfile(rtData, rsData, s0_data, s1_data, sp_data, ra_data, regWrite, beqctrl, jrctrl, memctrl, ALUsrc,  rtAddr, rsAddr, dataToWrite, sltCtrl, rsWriteAddr, clk);
 //INPUT: regWrite, beqctrl, jrctrl, ALUsrc, rtAddr, rsWriteAddr, dataToWrite, sltCtrl, rsAddr
 //OUTPUT: rtData, rsData, s0_data, s1_data, sp_data, ra_data
 
@@ -207,19 +208,14 @@ mux3_1 ctrlwb(dataToWrite, ALUresult, readData, pcAddrOutPlusOne, memToReg);		//
 //CONTROL: memToReg
 
 //---------------------------------------------------------------------------
-//mux3_1 ctrlnextpc(pcAddrIn, pcAddrOut, rsData, pcAddrOutPlusImm, nextctrl);
-//INPUT: pcAddrOut, rsData, pcAddrOutPlusImm
-//OUTPUT: pcAddrIn
-//CONTROL: nextctrl
-//---------------------------------------------------------------------------
-and a1(beqSatisfied, jumpCtrlToMux, beqctrl);
+and a1(beqSatisfied, jumpFlag_ALUctrl, beqctrl);
+or o1(jumpDecision, jctrl, beqSatisfied);
 //INPUT: jumpCtrlToMux, beqctrl
 //OUTPUT: beqSatisfied
 //---------------------------------------------------------------------------
 
-mux2_1_ctrl1_in2 ctrljalMUX(jalAddr, pcAddrOutPlusOne, pcAddrOutPlusImm, jalctrl);		//choose between jal(pc+imm) and pc+1
-mux2_1_ctrl1_in2 ctrljrMUX(jrAddr, jalAddr, rsData, jrctrl);			//choose between jr $ra and whatever comes from from ctrljalMUX
-mux2_1_ctrl1_in2 ctrlbeqMUX(pcFinalOut, pcAddrOutPlusOne,jrAddr, beqSatisfied);		//choose between beq relative address and whatever comes out from ctrljrMUX
+mux2_1_ctrl1_in2 ctrljalMUX(jalAddr, pcAddrOutPlusOne, pcAddrOutPlusImm, jumpDecision);		//choose between pc+imm and pc+1
+mux2_1_ctrl1_in2 ctrljrMUX(pcFinalOut, jalAddr, rsData, jrctrl);			//choose between jr $ra and whatever comes from from ctrljalMUX
 
 endmodule
 

@@ -9,12 +9,13 @@
 
 `timescale 1ns / 1ns
 
-module pc(clk , input1, output1, reset);
+module pc(clk , input1, output1, reset, pc);
 
 //-------------Input Ports-----------------------------
 input reset;
 input [7:0] input1;
 input clk;
+input [7:0]pc;
 
 wire reset;
 wire input1;
@@ -32,6 +33,8 @@ end
 always @(posedge clk) begin
 	if (reset == 1) begin
 		#1 output1 = 8'b00000000;
+	end if (pc == 8'b00000000) begin
+		$finish;
 	end
 	else begin
 		#1 output1 <= input1;
