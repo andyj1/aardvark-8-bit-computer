@@ -97,7 +97,7 @@ reg reset;		//reset pc counter
 //------------------Instructions-----------------------
 
 always begin
-	#1 clk = ~clk;
+	#2 clk = ~clk;
 	end
 initial 
 	begin
@@ -108,10 +108,10 @@ initial
 		zero = 0;
 		//pcAddrIn = 8'b00000000;
 		returnAddr = 2'b11;
-		#2 reset = 0;
+		#3 reset = 0;
 		//$monitor("pc: %b instruction: %b", pcAddrOut, instruction);
-		$monitor("pc: %b instruction: %b sp: %b ALUresult: %b dataToWrite: %b s0: %b s1: %b", pcAddrOut, instruction, sp_data, ALUresult, dataToWrite, s0_data, s1_data);	
-		#30 $finish;
+		$monitor("time: %t pc: %b instruction: %b rtAddr:%b rtData: %b rsAddr:%b rsData: %b", $time, pcAddrOut, instruction, rtAddr, rtData, rsAddr, rsData);	
+		#130 $finish;
 	end
 
 
@@ -119,81 +119,66 @@ initial
 pc mainPC(clk , pcFinalOut, pcAddrOut , reset); 
 //INPUT: pcAddrIn
 //OUTPUT: pcAddrOut 
-
 //---------------------------------------------------------------------------
 memory mainMem(instruction, readData, pcAddrOut, memWrite, memRead, ALUresult, rtData); 
 //INPUT: pcAddrOut, memWrite, memRead, ALUresult, rtData
 //OUTPUT: instruction, readData
-
 //---------------------------------------------------------------------------
 instruction_reg instReg(jImm5, jumpCheck2, inst2CtrlUnit, rtAddr, rsAddr, iImm2, funct, instruction);	//instruction register for decoding
 //INPUT: instruction
 //OUTPUT: jImm5, jumpCheck2, inst2CtrlUnit, rtAddr, rsAddr, iImm2, funct
-
 //---------------------------------------------------------------------------
 signext_2to8 ext1(jumpCheck8, jumpCheck2);	//sign extension for jump opcode check
 //INPUT: jumpCheck2
 //OUTPUT: jumpCheck8
-
 //---------------------------------------------------------------------------
 signext_5to8 ext2(jImm8, jImm5);			//sign extension for jump immediate
 //INPUT: jImm5
 //OUTPUT: jImm8
-
 //---------------------------------------------------------------------------
 signext_2to8 ext3(iImm8, iImm2);			//sign extension for I instruction
 //INPUT: iImm2
 //OUTPUT: iImm8
-
 //---------------------------------------------------------------------------
 ALU_zero compareforjump(jumpCtrlToMux, jumpCheck8);	//Check for jump code
 //INPUT: jumpCheck8
 //OUTPUT: jumpCtrlToMux
-
 //---------------------------------------------------------------------------
 mux2_1_ctrl1 ctrlJumpMux(muxJumpFlag, zero, funct, jumpCtrlToMux);		//choose between Jumps
 //INPUT: zero, funct
 //OUTPUT: muxJumpFlag
 //CONTROL: jumpCtrlToMux
-
 //---------------------------------------------------------------------------
-mux2_1_ctrl1_out1 ctrlJR(rsWriteAddr, rsAddr, returnAddr, ractrl);		//choose between ra and rsAddr
+mux2_1_ctrl1_out1 ctrlJR(rsWriteAddr, rtAddr, returnAddr, ractrl);		//choose between ra and rsAddr
 //INPUT: rtAddr, returnAddr
 //OUTPUT: rsWriteAddr
 //CONTROL: ractrl
-
 //---------------------------------------------------------------------------
 ctrl mainCtrl(jctrl, jrctrl, memWrite, memRead, memToReg, ALUOp, ALUsrc, nextctrl, regWrite, beqctrl, ractrl, jalctrl, sltCtrl, inst2CtrlUnit, muxJumpFlag);
 //INPUT: inst2CtrlUnit, muxJumpFlag(== funct if R or I type)
 //OUTPUT: jctrl, jrctrl, memWrite, memRead, memToReg, ALUOp, ALUsrc, nextctrl, regWrite, beqctrl, ractrl, jalctrl, sltCtrl
-
 //---------------------------------------------------------------------------
 //Register File		
-register_file mainRegfile(rtData, rsData, s0_data, s1_data, sp_data, ra_data, regWrite, beqctrl, jrctrl, ALUsrc, rtAddr, rsAddr, dataToWrite, sltCtrl, rsWriteAddr, clk);
+register_file mainRegfile(rtData, rsData, s0_data, s1_data, sp_data, ra_data, regWrite, beqctrl, jrctrl, ALUsrc, rtAddr, rsWriteAddr, dataToWrite, sltCtrl, rsAddr);
 //INPUT: regWrite, beqctrl, jrctrl, ALUsrc, rtAddr, rsWriteAddr, dataToWrite, sltCtrl, rsAddr
 //OUTPUT: rtData, rsData, s0_data, s1_data, sp_data, ra_data
-
 //---------------------------------------------------------------------------
 mux2_1_ctrl1_in2 ctrlImm(muxALUsrc, rtData, iImm8, ALUsrc);			//choose between rt and immediate
 //INPUT: rtData, iImm8
 //OUTPUT: muxALUsrc
 //CONTROL: ALUsrc
-
 //---------------------------------------------------------------------------
 ALUctrlunit aluctrlunit(ALUctrlbits, ALUOp, funct);		
 //INPUT: ALUOp, funct
 //OUTPUT: ALUctrlbits
-
 //---------------------------------------------------------------------------
-ALUctrl aluctrl(jumpFlag_ALUctrl, ALUresult, sltReg, ALUctrlbits, muxALUsrc, rsData, clk);		
+ALUctrl aluctrl(jumpFlag_ALUctrl, ALUresult, sltReg, ALUctrlbits, muxALUsrc, rsData);		
 //INPUT: ALUctrlbits, muxALUsrc, rsData
 //OUTPUT: jumpFlag_ALUctrl, ALUresult, sltReg		here: ALUresult is computed value if R type, effective address in memory if I type
-
 //---------------------------------------------------------------------------
 add1 add1(pcAddrOut, pcAddrOutPlusOne);			
 //INPUT: pcAddrOut
 //OUTPUT pcAddrOutPlusOne					for R or I type, PC(final) = PC(current) + 1
-
 //---------------------------------------------------------------------------
 addimm addimm(pcAddrOutPlusImm, pcAddrOut, jImm8);
 //INPUT: pcAddrIn
@@ -222,7 +207,6 @@ mux2_1_ctrl1_in2 ctrljrMUX(jrAddr, jalAddr, rsData, jrctrl);			//choose between 
 mux2_1_ctrl1_in2 ctrlbeqMUX(pcFinalOut, pcAddrOutPlusOne,jrAddr, beqSatisfied);		//choose between beq relative address and whatever comes out from ctrljrMUX
 
 endmodule
-
 
 
 

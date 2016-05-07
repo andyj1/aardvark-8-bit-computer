@@ -20,7 +20,7 @@ input wire[1:0] input1;	//unput at 1
 output reg [1:0] output1; 	
 
 //------------------Instructions-----------------------
-always @(input0||input1)
+always @*
 	begin
 		if (ctrl == 0)
 			output1 = input0;

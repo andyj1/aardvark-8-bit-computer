@@ -37,4 +37,8 @@ always @(posedge clk) begin
 		#1 output1 <= input1;
 	end
 end
+
+always @(reset) begin
+	output1 = 8'b00000000;
+end
 endmodule

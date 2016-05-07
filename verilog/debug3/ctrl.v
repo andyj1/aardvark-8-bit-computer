@@ -29,11 +29,12 @@ output reg ractrl;
 output reg jalctrl;
 output reg [1:0]sltctrl;	//see whether the control is slt_0 or slt_1
 output reg [1:0] nextctrl;
-output reg [3:0] instructions;
+reg [3:0] instructions;
 
 //------------------Instructions-----------------------
 initial
 	begin
+		//$display("Hello!");
 		jctrl = 0;
 		jrctrl = 0;
 		memWrite = 0;
@@ -51,9 +52,11 @@ initial
 	end
 always @*
 begin
-
+	instructions = {inst1,inst2};
+	//$display("Hello!");
+	//$display("OpCode: %b",instructions);
 	case(instructions)
-
+	
 	4'b0001: begin	//add
 			$display("add");
 			ALUop = 3'b000;

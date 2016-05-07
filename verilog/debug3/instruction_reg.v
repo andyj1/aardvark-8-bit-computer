@@ -32,7 +32,7 @@ initial
 		i_immediate <= 2'b0;
 	end
 
-always @ instruction_input 
+always @(instruction_input)
 	begin
 		j_immediate <= instruction_input[4:0];
 		jump_opcode_check <= instruction_input[7:6];

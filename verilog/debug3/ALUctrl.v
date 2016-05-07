@@ -8,12 +8,13 @@
 
 `timescale 1ns / 1ns
 
-module ALUctrl(zero, result, slt_reg, ALUctrlbits, data1, data2);
+module ALUctrl(zero, result, slt_reg, ALUctrlbits, data1, data2,clk);
 
 //-------------Input Ports-----------------------------
 input wire [2:0] ALUctrlbits;	//control bit from ALU control unit
 input wire [7:0] data1;			//8 bits of data1
 input wire [7:0] data2;			//8 bits of data2
+input wire clk;
 //input wire slt0_reg, slt1_reg;	//check slt0_reg, slt1_reg from register file
 
 //-------------Output Ports----------------------------
@@ -38,7 +39,7 @@ initial begin
 	save_msb = 0;
 end
 
-always @*  
+always @*
 	begin
 		//general ALU computation for R types; result
 		result = 0;
