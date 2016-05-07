@@ -1,7 +1,5 @@
 \documentclass[11pt, titlepage]{article}
 
-
-
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath}
 \usepackage{array}
@@ -28,7 +26,7 @@
 \newcommand{\studentLabNum}{Locker 123}
 \newcommand{\experimentNumber}{LAB X}
 \author{JEONG Andy, MACSHANE Gordon, SO Brenda}
-\newcommand{\authorLastName}{JEONG, MACSHANE, BRENDA}
+\newcommand{\authorLastName}{JEONG, MACSHANE, SO}
 \title{Aardvark - 8-bit Processor}
 \newcommand{\experimentShortName}{Aardvark - 8-bit Processor Documentation}
 
@@ -50,17 +48,27 @@
 
 \begin{document}
 	\maketitle
-    \setcounter{tocdepth}{1}
-    \section{HARDWARE OVERVIEW}
-    We are designing an 8-bit processor. Each instruction is 1 byte long. The main memory is word addressable while the instruction memory is byte addressable. There are 4 addressable registers: \$s1 (00), \$s2 (01), \$sp (10) and \$ra (11). \$slt\_0 and \$slt\_1 cannot be addressed directly, but rather utilized for jumping purposes.
+    \tableofcontents
+    \newpage
+    \setcounter{tocdepth}{1}	
+	\section{HARDWARE OVERVIEW}
+    We are designing an 8-bit processor. Each instruction is 1 byte long. The main memory is word addressable while the instruction memory is byte addressable. There are 4 addressable registers: \$s1 (00), \$s2 (01), \$sp (10) and \$ra (11). \$slt\_0 and \$slt\_1 cannot be addressed directly, but rather utilized for jumping purposes. All registers are initialized at 0, while the \$sp pointer is initialized at FF, which is the top of the memory stack. 
+    
+    \section{MEMORY IMPLEMENTATION}
+    The memory is byte addressable, since all registers can only carry 8 bits and each instruction has 8 bits. There are three sections of the memory stack, the text (0x00 - 0x4B), the data (0x4C - 0x4F), and the stack (0x50 - 0xFF). We decided to have a 64 bytes of instruction because when we look at our largest program, it has a total of 28 lines. The .data section is limited to only four global bytes because . Due to the existence of a pseudo instruction -load address(la). If the programmer declared a global variable in the .data section, the pseudo instruction would need to be expanded into the instructions available in the core instruction set. In the worst case scenario, each la command would need to be replaced by 16 core instructions. Since the text section can only occupy at most 76 bytes of instructions, there could only be at most 4 bytes for global data, assuming each data is one byte. 
+    
+    (Maybe we are going to implement cache?)
+    
+    \section{}
+    
     \section {CORE INSTRUCTION SET}
     \begin{center}
 \begin{tabular}{ >{\centering\arraybackslash}p{3cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{2cm} >{\centering\arraybackslash}p{4cm} >{\centering\arraybackslash}p{2cm} >{\centering\arraybackslash}p{2cm}} 
  \multicolumn{2}{c}{NAME,MNEUMONIC} & FORMAT & OPERATIONS & OPCODE & FUNCT\\
  \hline
- ADD & add & R & R[rs] = R[rs] + R[rt] & 000 & 0 \\ 
+ ADD & add & R & R[rs] = R[rs] + R[rt] & 000 & 1 \\ 
  \hline
- NAND & nand & R & R[rs] = NAND(R[rs],R[rt]) & 001 & 0 \\ 
+ NAND & nand & R & R[rs] = NAND(R[rs],R[rt]) & 001 & 1 \\ 
  \hline
  SET LESS THAN (slt\_0) & slt\_0 & R & R[rs] $<$ R[rt] ? 1 : 0 & 010 & 0 \\
   \hline
@@ -78,7 +86,7 @@
   \hline
  BRANCH IF EQUAL & beq & J & if R[slt\_0]=R[slt\_1]; PC = PC+immediate & 110 & n/a\\
   \hline
- JUMP AND LINK & jal & J &R[ra]=PC+2; PC = PC+immediate& 111 & n/a\\
+ JUMP AND LINK & jal & J &R[ra]=PC+1; PC = PC+immediate& 111 & n/a\\
   \hline
  JUMP REGISTER & jr & JR & PC = R[ra]& *101 & 1\\
  
@@ -104,8 +112,10 @@
 \end{tabular}
 \end{center}
 \newpage
+
+	\section{COMPILER}
     \section{SAMPLE CODE}
-To demonstrate the functionality of the instruction set, three sets of codes were written. THe first piece of code demosntrates basic arithmetic operations, including addition, subtraction, multiplication and division. The second and third sets of code demonstrates the summation from 1 to 10. The former performs the procedure recursively, the second performs the procedure non-recursively. Complementary C code is also provided for comparison.  
+To demonstrate the functionality of the instruction set, three sets of codes were written. The first piece of code demonstrates basic arithmetic operations, including addition, subtraction, multiplication and division. The second and third sets of code demonstrates the summation from 1 to 10. The former performs the procedure recursively, the second performs the procedure non-recursively. Complementary C code is also provided for comparison.  
 
 	\subsection{ARITHMETIC CODE}
     \subsubsection{Arithmetic Code in C}
@@ -123,25 +133,28 @@ int div(int a, int b)
 \end{lstlisting}
     \subsubsection{Arithmetic Code in Assembly}
 	\begin{lstlisting}[language=Ant]
-	#a = $s1, b = $s2
-        sw 0, $ra
-        sw 1, $s1
-        sw 2, $s2
-	lw 0, $s1 #this will act as the sum, eventually getting the product
-
-addition:
-	add $s1, $s2
-	sw 3, $s1
-
-multiplication:
-	lw 2, $s2
-	addi -1, $s2	#decrease b by one each time
-	sw 2, $s2
-	slt_0 $ra, $s2 	#if 0 < b add again
-	lw 1, $s2 	#put a into s2
-	lw 3, $s1
-	beq addition
-	lw 2, $ra
+.data 
+.byte num1 2
+.byte num2 3
+.text
+la $sp num1
+lw 0 $s1
+lw 1 $s2
+nand $sp $ra
+sw 0 $s1
+lw -1 $s1
+addi -1 $sp 
+jal MULT
+ADDITION: lw 1 $s2	
+	  add $s1 $s2
+	  lw 0 $s2
+MULT: addi -1 $s2
+      sw 0 $s2
+      sw -1 $ra
+      slt_0 $ra $s2
+      beq ADDITION
+      addi -1 $sp
+      sw 0 $s1
 -------------------------------------------
 #a = $s1, b = $s2
 
