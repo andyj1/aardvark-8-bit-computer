@@ -40,7 +40,7 @@ wire [7:0] pcAddrOutPlusImm;
 wire [7:0] pcFinalOut;
 wire [7:0] jrAddr;
 wire [7:0] jalAddr;
-wire [7:0] pcAddrNext;
+wire [7:0] pcAddrIn;
 wire [1:0] nextctrl;
 wire [7:0] pcAddrOutPlusOne;
 
@@ -191,9 +191,9 @@ mux3_1 ctrlwb(dataToWrite, ALUresult, readData, pcAddrOutPlusOne, memToReg);		//
 //CONTROL: memToReg
 
 //---------------------------------------------------------------------------
-mux3_1 ctrlnextpc(pcAddrNext, pcAddrOut, rsData, pcAddrOutPlusImm, nextctrl);
+mux3_1 ctrlnextpc(pcAddrIn, pcAddrOut, rsData, pcAddrOutPlusImm, nextctrl);
 //INPUT: pcAddrOut, rsData, pcAddrOutPlusImm
-//OUTPUT: pcAddrNext
+//OUTPUT: pcAddrIn
 //CONTROL: nextctrl
 //---------------------------------------------------------------------------
 and a1(beqSatisfied, jumpCtrlToMux, beqctrl);
