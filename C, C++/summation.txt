@@ -15,6 +15,7 @@ slt_0 $s1 $s2
 beq LOOP
 addi 2 $sp
 jr $ra
+DONE: jal DONNER
 LOOP: addi -1 $s1
 jal SUM
 lw 0 $ra
@@ -22,4 +23,4 @@ lw 1 $s2
 addi 2 $sp
 add $s1 $s2
 jr $ra
-DONE: sw 0 $s1
+DONNER: sw 0 $s1

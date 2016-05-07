@@ -110,9 +110,9 @@ initial
 		//pcAddrIn = 8'b00000000;
 		returnAddr = 2'b11;
 		#2 reset = 0;
-		$monitor("time: %g \t pc: %d instruction: %b s0_data: %b s1_data: %b sp_data: %b ", $time, pcAddrOut,instruction,s0_data, s1_data, sp_data);
+		$monitor("time: %g \t pc: %d instruction: %b s0_data: %b s1_data: %b sp_data: %b ra_data: %b ", $time, pcAddrOut,instruction,s0_data, s1_data, sp_data, ra_data, );
 	
-		#100 $finish;
+		#240 $finish;
 	end
 
 

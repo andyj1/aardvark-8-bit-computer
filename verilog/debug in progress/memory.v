@@ -26,6 +26,9 @@ initial
 	begin
 		$readmemb("test.bin", MDR); 
 		readData = 0;
+		for (i = 0; i < 16; i=i+1) begin
+			$display(MDR[i]);
+		end
 	end
 //fetch
 always @*

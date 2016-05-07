@@ -24,7 +24,7 @@ reg [7:0] MDR [0:255];		//8 bit wide, 256 address deep register memory
 
 initial 
 	begin
-		$readmemb("test.bin", MDR); 
+		$readmemb("test1.bin", MDR); 
 		readData = 0;
 	end
 always @*
@@ -32,8 +32,10 @@ always @*
 		instructions  = MDR[pc];
 		if (memRead == 1) begin
 			readData = MDR[input_addr]; //load word at the specified address
+			$display("MEMREAD %b: %b",input_addr, readData);
 		end if (memWrite == 1) begin
 			MDR[input_addr] = dataMemWrite;
+			$display("MEMWRITE %b: %b", input_addr, MDR[input_addr]);
 		end
 	end
 endmodule

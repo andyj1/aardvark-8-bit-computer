@@ -30,6 +30,7 @@ initial begin
 end
 
 always @(posedge clk) begin
+	$display("Hello!");
 	if (reset == 1) begin
 		#1 output1 = 8'b00000000;
 	end

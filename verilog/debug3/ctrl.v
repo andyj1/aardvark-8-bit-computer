@@ -256,8 +256,8 @@ begin
 				memRead = 0;
 				ALUop = 3'b000;
 				ALUsrc = 0;
-				regWrite = 0;
-				ractrl = 0;
+				regWrite = 1;
+				ractrl = 1;
 				sltctrl = 0;
 				nextctrl = 2'b10;
 				beqctrl = 0;
