@@ -126,7 +126,7 @@ mux2_1_ctrl1 ctrlJumpMux(finaljumpDecision, zero, funct, jumpDecision);		//choos
 mux2_1_ctrl1_in2 ctrlImm(finalToALU, rtData, iImmext, ALUsrc);			//choose between rt and immediate
 mux2_1_ctrl1_out1 ctrlJR(rsWriteAddr, rsAddr, returnAddr, ractrl);		//choose between ra and rsAddr
 mux3_1 ctrlwb(dataToWrite, ALUresult, readData, pcAddrIn, memToReg);		//choose between memory, ALU and PC to writeback to regFile
-mux3_1 ctrlnextpc(pcAddrNext, pcAddrOut, rsData, pcAddrImm, nextctrl);
+mux3_1 ctrlnextpc(pcAddrIn, pcAddrOut, rsData, pcAddrImm, nextctrl);
 
 mux2_1_ctrl1_out1 ctrljalMUX(jalAddr, pcAddrOut, pcAddrImm, jalctrl);		//choose between jal and pc+1
 mux2_1_ctrl1_out1 ctrljrMUX(jrAddr, jalAddr, rsAddr, jrctrl);			//choose between jr $ra and whatever comes from from ctrljalMUX
