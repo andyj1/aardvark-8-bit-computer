@@ -8,23 +8,28 @@
 
 `timescale 1ns / 1ns
 
-module pc(clk , input1, output1 , reset);
+module mux3_1(output1, input0, input1, input2, ctrl);
 
 //-------------Input Ports-----------------------------
-input wire reset;
-input [7:0] input1;
-input clk;
+input wire [1:0] ctrl;		
+input wire [7:0] input0;	//input at 0
+input wire [7:0] input1;	//input at 1
+input wire [7:0] input2;	//input at 2
+
 //-------------Output Ports----------------------------
+
 output reg [7:0] output1; 	//8 bits of output
 
 //------------------Instructions-----------------------
-
-always @(posedge clk) 
+always @*
 	begin
-		if(!reset)
+		case(ctrl)
+		2'b00:
+			output1 = input0;
+		2'b01:
 			output1 = input1;
-		else	
-			output1 = 8'b00000000;
+		2'b10:
+			output1 = input2;
+		endcase
 	end
 endmodule
-

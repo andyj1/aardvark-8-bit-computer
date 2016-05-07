@@ -24,8 +24,8 @@ reg [7:0] MDR [0:255];		//8 bit wide, 256 address deep register memory
 
 initial 
 	begin
-		$readmemb("multiplication.bin", MDR); 
-		readData = 8'b0;
+		$readmemb("test.bin", MDR); 
+		readData = 0;
 	end
 //fetch
 always @(pc)

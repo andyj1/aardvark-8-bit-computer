@@ -2,31 +2,25 @@
 // Created by: Team Aardvark
 // Course: Cooper Union ECE151A Spring 2016
 // Professor: Professor Marano
-// Module Name: 
+// Module Name: add1.v
 // Description: 
 //////////////////////////////////////////////////////////////////////////////////
 
 `timescale 1ns / 1ns
 
-module signext_5to8 (dataout,datain);
+module add1(in, out);
 
 //-------------Input Ports-----------------------------
-input wire [4:0] datain;	//input 
-
+input wire [7:0] in;			//8 bits of data1
 //-------------Output Ports----------------------------
-output reg [7:0] dataout; 	//8 bits of output
-
-//-------------Intermediate Ports Data Type-------------
-reg [3:0] sign;
+output reg [7:0] out; 	//8 bits of result
 
 //------------------Instructions-----------------------
-always @ datain
-	begin
-		if (datain >= 5'b10000) begin
-			sign = 3'b111;
-		end if (datain < 5'b10000) begin
-			sign = 3'b000;
-		end
-		dataout = {sign,datain};
-	end
+
+always @(in)
+begin
+	out = in + 1;
+end
+
+
 endmodule

@@ -8,7 +8,7 @@
 
 `timescale 1ns / 1ns
 
-module pc_tb;
+module pc_tb();
 
 //-------------Input Ports-----------------------------
 reg [7:0] input1;
@@ -24,7 +24,7 @@ always
 initial begin
 	clk = 1;
 	reset = 0;
-	input1 = 8'b00010001;
+	input1 = 8'b00000001;
 	$monitor("%b", output1);
 
 	#10 $finish;

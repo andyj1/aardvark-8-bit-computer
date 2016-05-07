@@ -1,34 +1,40 @@
+
 //////////////////////////////////////////////////////////////////////////////////
 // Created by: Team Aardvark
 // Course: Cooper Union ECE151A Spring 2016
 // Professor: Professor Marano
-// Module Name: Addition.v
-// Description: Adding 1 to PC to increment it
+// Module Name: 
+// Description: 
 //////////////////////////////////////////////////////////////////////////////////
 
 `timescale 1ns / 1ns
 
-module Addition(pc_in, pc_out, immediate);
+module pc(clk , input1, output1, reset);
 
 //-------------Input Ports-----------------------------
-input wire [7:0] pc_in;			//8 bits of data1
-input wire [7:0] immediate;
+input reset;
+input [7:0] input1;
+input clk;
+
+wire reset;
+wire input1;
+wire clk;
 //-------------Output Ports----------------------------
-output reg [7:0] pc_out; 	//8 bits of result
+output [7:0] output1; 	//8 bits of output
+reg [7:0] output1;
 
 //------------------Instructions-----------------------
 
-// 001: add
-// 010: nand
-// 011: comparison
-// 100: shift left
-// 101: shift right
-// 110: equal
-
-always @(pc_in)
-begin
-	pc_out = pc_in + immediate;
+initial begin
+	output1 <= 8'b00000000;
 end
 
-
+always @(posedge clk) begin
+	if (reset == 0) begin
+		#1 output1 = 8'b00000000;
+	end
+	else begin
+		output1 <= input1;
+	end
+end
 endmodule

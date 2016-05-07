@@ -28,6 +28,7 @@ output reg beqctrl;
 output reg ractrl;
 output reg jalctrl;
 output reg [1:0]sltctrl;	//see whether the control is slt_0 or slt_1
+output reg [1:0] nextctrl;
 
 output reg [3:0] instructions;
 
@@ -42,7 +43,6 @@ initial
 		ALUop = 3'b000;
 		ALUsrc = 0;
 		regWrite = 0;
-		beqctrl = 0;
 		ractrl = 0;
 		jalctrl = 0;
 		sltctrl = 0;
@@ -50,22 +50,19 @@ initial
 	end
 always @*
 begin
-	instructions = {inst1,inst2};
-	
+
 	case(instructions)
 
 	4'b0001: begin	//add
 			$display("add");
 			ALUop = 3'b000;
 			regWrite = 1;
-
 			jctrl = 0;
 			jrctrl = 0;
 			memWrite = 0;
 			memRead = 0;
 			memToReg = 2'b00;
 			ALUsrc = 0;
-			beqctrl = 0;
 			ractrl = 0;
 			jalctrl = 0;
 			sltctrl = 0;
@@ -74,14 +71,12 @@ begin
 				$display("nand");
 				ALUop = 3'b001;
 				regWrite = 1;
-
 				jctrl = 0;
 				jrctrl = 0;
 				memWrite = 0;
 				memRead = 0;
 				memToReg = 2'b00;
 				ALUsrc = 0;
-				beqctrl = 0;
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
@@ -90,15 +85,13 @@ begin
 				$display("slt_0");
 				ALUop = 3'b010;
 				regWrite = 1;
-				sltctrl = 2'b10;
-												
+				sltctrl = 2'b10;			
 				jctrl = 0;
 				jrctrl = 0;
 				memWrite = 0;
 				memRead = 0;
 				memToReg = 2'b00;
 				ALUsrc = 0;
-				beqctrl = 0;
 				ractrl = 0;
 				jalctrl = 0;
 			end
@@ -107,14 +100,12 @@ begin
 				ALUop = 3'b010;
 				regWrite = 1;
 				sltctrl = 2'b11;
-
 				jctrl = 0;
 				jrctrl = 0;
 				memWrite = 0;
 				memRead = 0;
 				memToReg = 2'b00;
 				ALUsrc = 0;
-				beqctrl = 0;
 				ractrl = 0;
 				jalctrl = 0;
 			end
@@ -122,14 +113,12 @@ begin
 				$display("sl");
 				ALUop = 3'b011;
 				regWrite = 1;
-
 				jctrl = 0;
 				jrctrl = 0;
 				memWrite = 0;
 				memRead = 0;
 				memToReg = 2'b00;
 				ALUsrc = 0;
-				beqctrl = 0;
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;	
@@ -138,14 +127,12 @@ begin
 				$display("sr");
 				ALUop = 3'b100;
 				regWrite = 1;
-
 				jctrl = 0;
 				jrctrl = 0;
 				memWrite = 0;
 				memRead = 0;
 				memToReg = 2'b00;
 				ALUsrc = 0;
-				beqctrl = 0;
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
@@ -157,11 +144,9 @@ begin
 				memToReg = 2'b01;
 				regWrite = 1;
 				ALUsrc = 1;
-
 				jctrl = 0;
 				jrctrl = 0;
 				memWrite = 0;
-				beqctrl = 0;
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
@@ -171,13 +156,11 @@ begin
 				ALUop = 111;
 				memWrite = 1;
 				ALUsrc = 1;
-
 				jctrl = 0;
 				jrctrl = 0;
 				memRead = 0;
 				memToReg = 2'b00;
 				regWrite = 0;
-				beqctrl = 0;
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
@@ -187,13 +170,11 @@ begin
 				ALUop = 3'b100;
 				regWrite = 1;
 				ALUsrc = 1;
-				
 				jctrl = 0;
 				jrctrl = 0;
 				memWrite = 0;
 				memRead = 0;
 				memToReg = 2'b00;
-				beqctrl = 0;
 				ractrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
@@ -201,8 +182,7 @@ begin
 	4'b1011: begin	//jr
 				$display("jr");
 				jrctrl = 1;
-				ractrl = 1;	//controls mux
-
+				ractrl = 1;	
 				jctrl = 0;
 				memWrite = 0;
 				memRead = 0;
@@ -210,7 +190,6 @@ begin
 				ALUop = 3'b000;
 				ALUsrc = 0;
 				regWrite = 0;
-				beqctrl = 0;
 				jalctrl = 0;
 				sltctrl = 0;
 			end
@@ -218,9 +197,7 @@ begin
 				$display("beq");
 				ALUop = 3'b101;
 				jctrl = 1;
-				beqctrl = 1;
 				jalctrl = 1;
-
 				jrctrl = 0;
 				memWrite = 0;
 				memRead = 0;
@@ -235,14 +212,12 @@ begin
 				jctrl = 1;
 				memToReg = 2'b10;
 				jalctrl = 1;
-
 				jrctrl = 0;
 				memWrite = 0;
 				memRead = 0;
 				ALUop = 3'b000;
 				ALUsrc = 0;
 				regWrite = 0;
-				beqctrl = 0;
 				ractrl = 0;
 				sltctrl = 0;
 			end
@@ -256,7 +231,6 @@ begin
 				ALUop = 3'b000;
 				ALUsrc = 0;
 				regWrite = 0;
-				beqctrl = 0;
 				ractrl = 0;
 			end
 	endcase

@@ -8,7 +8,7 @@
 
 `timescale 1ns / 1ns
 
-module ALUctrl(zero, result, ALUctrlbits, data1, data2);
+module ALUctrl(zero, result, slt_reg, ALUctrlbits, data1, data2);
 
 //-------------Input Ports-----------------------------
 input wire [2:0] ALUctrlbits;	//control bit from ALU control unit
@@ -17,8 +17,8 @@ input wire [7:0] data2;			//8 bits of data2
 //input wire slt0_reg, slt1_reg;	//check slt0_reg, slt1_reg from register file
 
 //-------------Output Ports----------------------------
-output reg [7:0] result; 	//8 bits of result
 output reg zero; 			//Gives 1 for jumping
+output reg [7:0] result; 	//8 bits of results
 output reg slt_reg;			//to be fed into register file to write on slt0_reg or slt1_reg
 
 reg [7:0] save_msb;

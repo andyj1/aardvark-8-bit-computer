@@ -8,23 +8,23 @@
 
 `timescale 1ns / 1ns
 
-module mux2_1_ctrl1_out1(output1, input0, input1, ctrl);
+module ALU_zero(zero, in);
 
 //-------------Input Ports-----------------------------
-input wire ctrl;		
-input wire input0;	//input at 0
-input wire input1;	//unput at 1
-
+input wire [7:0] in;
 //-------------Output Ports----------------------------
-
-output reg output1; 	
+output reg zero; 	
 
 //------------------Instructions-----------------------
-always @(input0||input1)
-	begin
-		if (ctrl == 0)
-			output1 = input0;
-		if (ctrl == 1)
-			output1 = input1;
+
+always @(in)
+begin
+	if (in == 8'b11111111) begin
+		zero = 0;
+	end else begin
+		zero = 1;
 	end
+end
+
+
 endmodule
