@@ -66,9 +66,9 @@
 \begin{tabular}{ >{\centering\arraybackslash}p{3cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{2cm} >{\centering\arraybackslash}p{4cm} >{\centering\arraybackslash}p{2cm} >{\centering\arraybackslash}p{2cm}} 
  \multicolumn{2}{c}{NAME,MNEUMONIC} & FORMAT & OPERATIONS & OPCODE & FUNCT\\
  \hline
- ADD & add & R & R[rs] = R[rs] + R[rt] & 000 & 1 \\ 
+ ADD & add & R & R[rt] = R[rs] + R[rt] & 000 & 1 \\ 
  \hline
- NAND & nand & R & R[rs] = NAND(R[rs],R[rt]) & 001 & 1 \\ 
+ NAND & nand & R & R[rt] = NAND(R[rs],R[rt]) & 001 & 1 \\ 
  \hline
  SET LESS THAN (slt\_0) & slt\_0 & R & R[rs] $<$ R[rt] ? 1 : 0 & 010 & 0 \\
   \hline

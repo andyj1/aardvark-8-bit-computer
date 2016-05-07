@@ -8,7 +8,7 @@
 
 `timescale 1ns / 1ns
 
-module register_file (rt_data, rs_data, s0_data, s1_data, sp_data, ra_data, regWrite, beqctrl, jrctrl, memctrl, ALUsrc, rt_addr, rs_addr, dataToWrite, slt_reg, rs_write_addr, clk);
+module register_file (rt_data, rs_data, s1_data, s2_data, sp_data, ra_data, regWrite, beqctrl, jrctrl, memctrl, ALUsrc, rt_addr, rs_addr, dataToWrite, slt_reg, rs_write_addr, clk);
 
 input wire regWrite;
 input wire beqctrl;
@@ -24,8 +24,8 @@ input wire memctrl;
 output reg [7:0] rt_data;
 output reg [7:0] rs_data;
 
-output reg [7:0] s0_data;
 output reg [7:0] s1_data;
+output reg [7:0] s2_data;
 output reg [7:0] sp_data;
 output reg [7:0] ra_data;
 
@@ -53,8 +53,8 @@ initial
 		
 		rt_data = 8'b00000000;
 		rs_data = 8'b00000000;
-		s0_data = 0;
 		s1_data = 0;
+		s2_data = 0;
 		sp_data = 0;
 		ra_data = 0;
 	end
@@ -101,8 +101,8 @@ always @(posedge clk)
 	end
 always @*
 begin
-	s0_data = data_reg[0];
-	s1_data = data_reg[1];
+	s1_data = data_reg[0];
+	s2_data = data_reg[1];
 	sp_data = data_reg[2];
 	ra_data = data_reg[3];
 
