@@ -11,8 +11,8 @@
 module ctrl(jctrl, jrctrl, memWrite, memRead, memToReg, ALUop, ALUsrc, nextctrl, regWrite, beqctrl, ractrl, jalctrl, sltctrl, inst1, inst2);
 
 //-------------Input Ports-----------------------------
-input wire [2:0] inst1;
-input wire inst2;
+input wire [2:0] inst1;	//opcode
+input wire inst2;		//funct
 
 //-------------Output Ports----------------------------
 
@@ -27,7 +27,7 @@ output reg regWrite;
 output reg beqctrl;
 output reg ractrl;
 output reg jalctrl;
-output reg [1:0]sltctrl;	//see whether the control is slt_0 or slt_1
+output reg [1:0] sltctrl;	//see whether the control is slt_0 or slt_1
 output reg [1:0] nextctrl;
 output reg [3:0] instructions;
 
@@ -68,6 +68,7 @@ begin
 			jalctrl = 0;
 			sltctrl = 0;
 			nextctrl = 2'b00;
+			beqctrl = 0;
 	end 
 	4'b0011: begin	//nand
 				$display("nand");
@@ -83,6 +84,7 @@ begin
 				jalctrl = 0;
 				sltctrl = 0;
 				nextctrl = 2'b00;
+				beqctrl = 0;
 			end
 	4'b0100: begin	//slt_0
 				$display("slt_0");
@@ -98,6 +100,7 @@ begin
 				ractrl = 0;
 				jalctrl = 0;
 				nextctrl = 2'b00;
+				beqctrl = 0;
 			end
 	4'b0101: begin	//slt_1
 				$display("slt_1");
@@ -113,6 +116,7 @@ begin
 				ractrl = 0;
 				jalctrl = 0;
 				nextctrl = 2'b00;
+				beqctrl = 0;
 			end
 	4'b0110: begin	//sl
 				$display("sl");
@@ -128,6 +132,7 @@ begin
 				jalctrl = 0;
 				sltctrl = 0;	
 				nextctrl = 2'b00;
+				beqctrl = 0;
 			end
 	4'b0111: begin	//sr
 				$display("sr");
@@ -143,6 +148,7 @@ begin
 				jalctrl = 0;
 				sltctrl = 0;
 				nextctrl = 2'b00;
+				beqctrl = 0;
 			end
 	4'b1000: begin	//lw
 				$display("lw");
@@ -158,6 +164,7 @@ begin
 				jalctrl = 0;
 				sltctrl = 0;
 				nextctrl = 2'b01;
+				beqctrl = 0;
 			end
 	4'b1001: begin //sw
 				$display("sw");
@@ -173,6 +180,7 @@ begin
 				jalctrl = 0;
 				sltctrl = 0;
 				nextctrl = 2'b01;
+				beqctrl = 0;
 			end
 	4'b1010: begin	//addi 
 				$display("addi");
@@ -188,6 +196,7 @@ begin
 				jalctrl = 0;
 				sltctrl = 0;
 				nextctrl = 2'b00;
+				beqctrl = 0;
 			end
 	4'b1011: begin	//jr
 				$display("jr");
@@ -203,6 +212,7 @@ begin
 				jalctrl = 0;
 				sltctrl = 0;
 				nextctrl = 2'b00;
+				beqctrl = 0;
 			end
 	4'b1100: begin	//beq	
 				$display("beq");
@@ -218,6 +228,7 @@ begin
 				ractrl = 0;
 				sltctrl = 0;
 				nextctrl = 2'b00;
+				beqctrl = 1;
 			end
 	4'b1110: begin //jal
 				$display("jal");
@@ -233,6 +244,7 @@ begin
 				ractrl = 0;
 				sltctrl = 0;
 				nextctrl = 2'b10;
+				beqctrl = 0;
 			end
 	default: begin
 				$display("default");
