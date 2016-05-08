@@ -19,15 +19,14 @@ nand $sp $ra 	done
 sw 0 $s1	done
 lw -1 $s1	done
 addi -1 $sp 	done
-jal 4		done
-
-lw 1 $s2	done
-add $s1 $s2	done
-lw 0 $s2
-
-addi -1 $s2	done
-sw 0 $s2	done
-slt_0 $ra $s2	done
-beq -7		done
+jal 4		done 11100100
+lw 1 $s2	done 10000101
+add $s1 $s2	done 00010100
+lw 0 $s2	done 10000001	
+lw -1 $ra	done 10001111 !!
+addi -1 $s2	done 10101101
+sw 0 $s2	done 10010001
+slt_0 $ra $s2	done 01000001
+beq -7		done 11011001
 addi -1 $sp
 sw 0 $s1
