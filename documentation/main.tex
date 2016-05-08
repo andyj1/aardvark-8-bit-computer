@@ -60,59 +60,6 @@ The memory is byte addressable, since all registers can only carry 8 bits and ea
 
 \par Since the fact that a pseudo-instruction--load address("la")--needs to handle loading of data into stack, the assembler was written for this particular processor. If a programmer declared a global variable in the data section of the memory, the pseudo instruction would need to be expanded into the instructions available in the core instruction set. In the worst case scenario, each "la" command would need to be replaced by 16 core instructions. Since the text section can only occupy at most 76 bytes of instructions, there could only be at most 4 bytes for global data, assuming each data is one byte. 
 
-\newpage
-\section {CORE INSTRUCTION SET}
-\begin{center}
-\begin{tabular}{ >{\centering\arraybackslash}p{3cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{2cm} >{\centering\arraybackslash}p{4cm} >{\centering\arraybackslash}p{2cm} >{\centering\arraybackslash}p{2cm}} 
-\multicolumn{2}{c}{NAME, MNEUMONIC} & FORMAT & OPERATIONS & OPCODE & FUNCT\\
-\hline
-ADD & add & R & R[rt] = R[rs] + R[rt] & 000 & 1 \\ 
-\hline
-NAND & nand & R & R[rt] = NAND(R[rs],R[rt]) & 001 & 1 \\ 
-\hline
-SET LESS THAN (slt\_0) & slt\_0 & R & R[rs] $<$ R[rt] ? 1 : 0 & 010 & 0 \\
-\hline
-SET LESS THAN (slt\_1)& slt\_1 & R & R[rs] $<$ R[rt] ? 1 : 0 & 010 & 1 \\
-\hline
-SHIFT LEFT & sl & R & R[rs] = R[rt] $<$$<$ 1 & 011 & 0 \\
-\hline
-SHIFT RIGHT & sr & R & R[rs] = R[rt] $>$$>$ 1 & 011 & 1 \\
-\hline
-LOAD WORD & lw & I & R[rs] = Mem(R[sp] + immediate)& 100 & 0\\
-\hline
-SAVE WORD & sw & I & Mem(R[sp] + immediate) = R[rs]& 100 & 1\\
-\hline
-ADDI & addi & I & R[rs] = R[rs] + immediate & 101 & 0 \\
-\hline
-BRANCH IF EQUAL & beq & J & if R[slt\_0]=R[slt\_1]; PC = PC+immediate & 110 & n/a\\
-\hline
-JUMP AND LINK & jal & J &R[ra]=PC+1; PC = PC+immediate& 111 & n/a\\
-\hline
-JUMP REGISTER & jr & JR & PC = R[ra]& *101 & 1\\
-
-\hline
-\end{tabular}
-\end{center}
-* jump register can only jump to R[ra] and has the instruction as 00010011.
-
-\section{BASIC INSTRUCTION FORMAT}
-\begin{center}
-\begin{tabular}{>{\centering\arraybackslash}p{2cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm}} 
-
-Type & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0 \\
-\hline
-\multicolumn{1}{|c|}{R} & \multicolumn{3}{|c|}{opcode} & func & \multicolumn{2}{|c|}{rs} & \multicolumn{2}{|c|}{rt}\\ 
-\hline
-\multicolumn{1}{|c|}{I} & \multicolumn{3}{|c|}{opcode} & func & \multicolumn{2}{|c|}{immediate} & \multicolumn{2}{|c|}{rs} \\ 
-\hline
-\multicolumn{1}{|c|}{J} & \multicolumn{3}{|c|}{opcode} & \multicolumn{5}{|c|}{PC relative immediate} \\ 
-\hline
-\multicolumn{1}{|c|}{JR} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{1} \\ 
-\hline
-\end{tabular}
-\end{center}
-\newpage
-
 \section{COMPILER}
 
 \newpage
@@ -150,7 +97,7 @@ sw 0 $s1
 lw -1 $s1
 addi -1 $sp 
 jal MULT
-ADDITION: lw 1 $s2	
+ADDITION: lw 1 $s2  
 add $s1 $s2
 lw 0 $s2
 MULT: addi -1 $s2
@@ -209,39 +156,39 @@ function:
 nand $s1, $s1
 nand $s2, $s2  
 sl $s1, $s1
-nand $s2 $s1	# i($s2) = 1 
-sw 0, $s2	# store i
+nand $s2 $s1  # i($s2) = 1 
+sw 0, $s2 # store i
 
-nand $s1, $s1	#s1 becomes 1
-sr $s1, $s1	#initialize sum($s1) = 0
-sw 1, $s1 	#store sum($s1) into offset 1 of $sp
+nand $s1, $s1 #s1 becomes 1
+sr $s1, $s1 #initialize sum($s1) = 0
+sw 1, $s1   #store sum($s1) into offset 1 of $sp
 
-add $s1, $s2	 #n = 1
+add $s1, $s2   #n = 1
 sl $s1, $s1
 sl $s1, $s1
 sl $s1, $s1      #n = 2^3 * n 
-add $s1, $s2	 #n = 9
-add $s1, $s2	 #n($s1) = 10
-sw 2, $s1	#save 10 to memory
+add $s1, $s2   #n = 9
+add $s1, $s2   #n($s1) = 10
+sw 2, $s1 #save 10 to memory
 
 nand $s1, $s1
 nand $s2, $s2  
 sl $s1, $s1
-nand $s1 $s2		# $s1 = 1 	
-sw 3, $s1		#store value 1
+nand $s1 $s2    # $s1 = 1   
+sw 3, $s1   #store value 1
 
 LOOP:
-lw 2, $s1	 #load n	
-slt_0 $s2, $s1	 # i < n
-slt_1 $s1, $s2	 # i > n
-beq END		#if i = n, go to END
-lw 0, $s2	#load i
-lw 1, $s1	#load sum
-add $s1, $s2 	#sum($s1) += i
+lw 2, $s1  #load n  
+slt_0 $s2, $s1   # i < n
+slt_1 $s1, $s2   # i > n
+beq END   #if i = n, go to END
+lw 0, $s2 #load i
+lw 1, $s1 #load sum
+add $s1, $s2  #sum($s1) += i
 sw 1, $s1
 lw 3, $s1
-lw 0, $s2	#load i to $s2
-add $s2, $s1	# i = i + 1
+lw 0, $s2 #load i to $s2
+add $s2, $s1  # i = i + 1
 jal LOOP
 END:
 lw 1, $s1
@@ -266,37 +213,37 @@ nand $s1, $s1
 nand $s2, $s2  
 sl $s1, $s1
 nand $s2 $s1
-nand $s1, $s1		#$s1 = -2	
-sw 0, $s2		#save n in $s2 to memory
+nand $s1, $s1   #$s1 = -2 
+sw 0, $s2   #save n in $s2 to memory
 
 #then follows to sum (recursion)
 sum:
-add $sp, $s1		#adjust stack for 2 items $s1 = -2
-sw 1, $ra		#save return address to memory
-sw 2, $s2		#save current n to memory
-nand $s1, $s1		#s1 becomes 1
-sw 3, $s1		#saves $s1 (= 1)
-slt_0 $s1, $s2		#slt_0=n > 1?, 0:1	
-slt_1 $s2, $s1		#slt_1=n>1?, 0:1 	
-beq END			#if n < 1, jump to L1
+add $sp, $s1    #adjust stack for 2 items $s1 = -2
+sw 1, $ra   #save return address to memory
+sw 2, $s2   #save current n to memory
+nand $s1, $s1   #s1 becomes 1
+sw 3, $s1   #saves $s1 (= 1)
+slt_0 $s1, $s2    #slt_0=n > 1?, 0:1  
+slt_1 $s2, $s1    #slt_1=n>1?, 0:1  
+beq END     #if n < 1, jump to L1
 
-nand $s1, $s1		#$s1 = -2
-lw  3, $s2		#load 1 into $s2
-add $s1, $s2		#$s1 = -1
-lw 2, $s2		#load n into $s2
-add $s2, $s1		#decrement n by 1
-jal sum			#recursive call
+nand $s1, $s1   #$s1 = -2
+lw  3, $s2    #load 1 into $s2
+add $s1, $s2    #$s1 = -1
+lw 2, $s2   #load n into $s2
+add $s2, $s1    #decrement n by 1
+jal sum     #recursive call
 
 lw 3, $s1
-add $sp, $s1		#pop 2 items from stack (s1 needs to be 1)
+add $sp, $s1    #pop 2 items from stack (s1 needs to be 1)
 add $sp, $s1
-lw 1, $ra		#restore return address
-lw 0, $s1		#restore original n to s1
-add $s2, $s1		#s2 = s2 + s1
-jr $ra			#return to calling address
+lw 1, $ra   #restore return address
+lw 0, $s1   #restore original n to s1
+add $s2, $s1    #s2 = s2 + s1
+jr $ra      #return to calling address
 
 END: 
-jr $ra			#return 0 if n is not > 1
+jr $ra      #return 0 if n is not > 1
 \end{lstlisting}
 
 \end{document}
