@@ -25,7 +25,6 @@ int main(){
 	FILE *outfptr;	//output file
 	char buf[1024];
 	char newNameBuf[255];
-	char newbuf[1024];
 	char interbuf[1024];
 	char *buffer[1024];
 	char *outbuf[1024];
@@ -186,7 +185,8 @@ int main(){
 			for (int b = 0; b < a; b++){
 				instrLabellist[numLabel].inst_loc[b] = buf[b];
 			}
-			instrLabellist[numLabel].location = text + count;
+			printf("%s: %d", instrLabellist[numLabel].inst_loc,count);
+			instrLabellist[numLabel].location = count;
 			numLabel += 1;
 		}
 		count += 1;
@@ -194,16 +194,18 @@ int main(){
 	
 	rewind(intfptr);
 	int checkers;
+	int cur_loc = 1;
 	while (fgets(buf,1000, intfptr)!=NULL && checkers <= i){
 		fprintf(outfptr,"%s",buf);
 		checkers++;
+		cur_loc += 1;
 	}
 	//fprintf(outfptr, "%s", buf);
 	//go through file again and relabel the labels
 	//fputs(buf, outfptr);
-	int cur_loc = text;
+	
 	while (fgets(buf,1000, intfptr)!=NULL){
-		//printf("%s\n", buf);
+		printf("%s\n", buf);
 		if ((buf[0] == 'j' && buf[1] == 'a' & buf[2] == 'l') || (buf[0] == 'b' && buf[1] == 'e' & buf[2] == 'q')){
 			
 			int j = 0;
@@ -216,7 +218,7 @@ int main(){
 			}
 			j += 1;
 			
-			while (buf[j] != '\0'){
+			while ((buf[j] >= 48 && buf[j] <= 57)||(buf[j] >= 65 && buf[j] <= 90)||(buf[j] >= 97 && buf[j] <= 122)){
 				instLabel[k] = buf[j];
 				k++;
 				j++;
@@ -231,6 +233,7 @@ int main(){
 					}
 				}
 				if (stillOK == 1){
+					printf("%d\n", cur_loc);
 					int offset;
 					offset = instrLabellist[m].location - cur_loc ;
 					if (buf[0] == 'b'){
@@ -246,7 +249,10 @@ int main(){
 		}else{
 			int a = 0;
 			int d = 0;
-			while (buf[a] != ':' && buf[a] != '\0'){
+			char bufff[1024] = {'\0'};
+			char newbuf[1024] = {'\0'};
+			while (buf[a] != ':' && buf[a] != '\0' && buf[a] != 10){
+				bufff[a] = buf[a];
 				a++;
 			}
 			if (buf[a] == ':'){
@@ -256,10 +262,10 @@ int main(){
 					a++;
 					d++;
 				}
-				fputs(newbuf,outfptr);
+				fprintf(outfptr,"%s",newbuf);				
 				//printf("%s ", newbuf);
-			}else if(buf[a] == '\0'){
-				fputs(buf,outfptr);
+			}else{
+				fprintf(outfptr,"%s\n",bufff);
 			}
 		}
 		cur_loc += 1;
