@@ -27,7 +27,7 @@
 \newcommand{\experimentNumber}{LAB X}
 \author{JEONG Andy, MACSHANE Gordon, SO Brenda}
 \newcommand{\authorLastName}{JEONG, MACSHANE, SO}
-\title{Aardvark - 8-bit Processor}
+\title{Aardvark - 8-bit Computer Processor Design}
 \newcommand{\experimentShortName}{Aardvark - 8-bit Processor Documentation}
 
 \date{\parbox{\linewidth}{}}
@@ -47,92 +47,97 @@
 \newcommand{\gpmol}{\si{\gram\per\mol}}
 
 \begin{document}
-	\maketitle
-    \tableofcontents
-    \newpage
-    \setcounter{tocdepth}{1}	
-	\section{HARDWARE OVERVIEW}
-    We are designing an 8-bit processor. Each instruction is 1 byte long. The main memory is word addressable while the instruction memory is byte addressable. There are 4 addressable registers: \$s1 (00), \$s2 (01), \$sp (10) and \$ra (11). \$slt\_0 and \$slt\_1 cannot be addressed directly, but rather utilized for jumping purposes. All registers are initialized at 0, while the \$sp pointer is initialized at FF, which is the top of the memory stack. 
-    
-    \section{MEMORY IMPLEMENTATION}
-    The memory is byte addressable, since all registers can only carry 8 bits and each instruction has 8 bits. There are three sections of the memory stack, the text (0x00 - 0x4B), the data (0x4C - 0x4F), and the stack (0x50 - 0xFF). We decided to have a 64 bytes of instruction because when we look at our largest program, it has a total of 28 lines. The .data section is limited to only four global bytes because . Due to the existence of a pseudo instruction -load address(la). If the programmer declared a global variable in the .data section, the pseudo instruction would need to be expanded into the instructions available in the core instruction set. In the worst case scenario, each la command would need to be replaced by 16 core instructions. Since the text section can only occupy at most 76 bytes of instructions, there could only be at most 4 bytes for global data, assuming each data is one byte. 
-    
-    (Maybe we are going to implement cache?)
-    
-    \section{}
-    
-    \section {CORE INSTRUCTION SET}
-    \begin{center}
+\maketitle
+\tableofcontents
+\newpage
+\setcounter{tocdepth}{1}
+\section{ABSTRACT}
+Employing a subset of MIPS ISA, an 8-bit processor was designed  using Verilog language. Each instruction is set to 1-byte, or 8-bit, length, and the main memory is word addressable while the instruction memory is byte addressable. There are 4 addressable registers: \$s1 (00), \$s2 (01), \$sp (10) and \$ra (11). Two other registers in the register file, \$slt\_0 and \$slt\_1, cannot be addressed directly, but may be well utilized for jumping (beq instruction). All registers are initialized at 0, while the \$sp pointer is initialized at 0xFF (255 in decimal), which is the top of the memory stack. 
+\newpage
+
+\section{MEMORY}
+The memory is byte addressable, since all registers can only carry 8 bits and each instruction has 8 bits. There are three sections of the memory stack, the text (0x00 - 0x4B), the data (0x4C - 0x4F), and the stack (0x50 - 0xFF). The allocation of text section is determined to be 64 bytes of instruction because the programs presented in general involve at most 28 lines, and as the maximum 64 was enough. The data section is limited to only 4 global bytes in general no more than 4 arguments will be taken for most programs (unless very large programs, which are not considered for this processor). 
+
+\par Since the fact that a pseudo-instruction--load address("la")--needs to handle loading of data into stack, the assembler was written for this particular processor. If a programmer declared a global variable in the data section of the memory, the pseudo instruction would need to be expanded into the instructions available in the core instruction set. In the worst case scenario, each "la" command would need to be replaced by 16 core instructions. Since the text section can only occupy at most 76 bytes of instructions, there could only be at most 4 bytes for global data, assuming each data is one byte. 
+
+\newpage
+\section {CORE INSTRUCTION SET}
+\begin{center}
 \begin{tabular}{ >{\centering\arraybackslash}p{3cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{2cm} >{\centering\arraybackslash}p{4cm} >{\centering\arraybackslash}p{2cm} >{\centering\arraybackslash}p{2cm}} 
- \multicolumn{2}{c}{NAME,MNEUMONIC} & FORMAT & OPERATIONS & OPCODE & FUNCT\\
- \hline
- ADD & add & R & R[rs] = R[rs] + R[rt] & 000 & 1 \\ 
- \hline
- NAND & nand & R & R[rs] = NAND(R[rs],R[rt]) & 001 & 1 \\ 
- \hline
- SET LESS THAN (slt\_0) & slt\_0 & R & R[rs] $<$ R[rt] ? 1 : 0 & 010 & 0 \\
-  \hline
- SET LESS THAN (slt\_1)& slt\_1 & R & R[rs] $<$ R[rt] ? 1 : 0 & 010 & 1 \\
-  \hline
- SHIFT LEFT & sl & R & R[rs] = R[rt] $<$$<$ 1 & 011 & 0 \\
-  \hline
- SHIFT RIGHT & sr & R & R[rs] = R[rt] $>$$>$ 1 & 011 & 1 \\
-  \hline
- LOAD WORD & lw & I & R[rs] = Mem(R[sp] + immediate)& 100 & 0\\
-  \hline
- SAVE WORD & sw & I & Mem(R[sp] + immediate) = R[rs]& 100 & 1\\
-  \hline
- ADDI & addi & I & R[rs] = R[rs] + immediate & 101 & 0 \\
-  \hline
- BRANCH IF EQUAL & beq & J & if R[slt\_0]=R[slt\_1]; PC = PC+immediate & 110 & n/a\\
-  \hline
- JUMP AND LINK & jal & J &R[ra]=PC+1; PC = PC+immediate& 111 & n/a\\
-  \hline
- JUMP REGISTER & jr & JR & PC = R[ra]& *101 & 1\\
- 
- \hline
+\multicolumn{2}{c}{NAME, MNEUMONIC} & FORMAT & OPERATIONS & OPCODE & FUNCT\\
+\hline
+ADD & add & R & R[rt] = R[rs] + R[rt] & 000 & 1 \\ 
+\hline
+NAND & nand & R & R[rt] = NAND(R[rs],R[rt]) & 001 & 1 \\ 
+\hline
+SET LESS THAN (slt\_0) & slt\_0 & R & R[rs] $<$ R[rt] ? 1 : 0 & 010 & 0 \\
+\hline
+SET LESS THAN (slt\_1)& slt\_1 & R & R[rs] $<$ R[rt] ? 1 : 0 & 010 & 1 \\
+\hline
+SHIFT LEFT & sl & R & R[rs] = R[rt] $<$$<$ 1 & 011 & 0 \\
+\hline
+SHIFT RIGHT & sr & R & R[rs] = R[rt] $>$$>$ 1 & 011 & 1 \\
+\hline
+LOAD WORD & lw & I & R[rs] = Mem(R[sp] + immediate)& 100 & 0\\
+\hline
+SAVE WORD & sw & I & Mem(R[sp] + immediate) = R[rs]& 100 & 1\\
+\hline
+ADDI & addi & I & R[rs] = R[rs] + immediate & 101 & 0 \\
+\hline
+BRANCH IF EQUAL & beq & J & if R[slt\_0]=R[slt\_1]; PC = PC+immediate & 110 & n/a\\
+\hline
+JUMP AND LINK & jal & J &R[ra]=PC+1; PC = PC+immediate& 111 & n/a\\
+\hline
+JUMP REGISTER & jr & JR & PC = R[ra]& *101 & 1\\
+
+\hline
 \end{tabular}
 \end{center}
 * jump register can only jump to R[ra] and has the instruction as 00010011.
-    
-    \section{BASIC INSTRUCTION FORMAT}
-    \begin{center}
+
+\section{BASIC INSTRUCTION FORMAT}
+\begin{center}
 \begin{tabular}{>{\centering\arraybackslash}p{2cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm} >{\centering\arraybackslash}p{1cm}} 
 
- Type & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0 \\
- \hline
+Type & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0 \\
+\hline
 \multicolumn{1}{|c|}{R} & \multicolumn{3}{|c|}{opcode} & func & \multicolumn{2}{|c|}{rs} & \multicolumn{2}{|c|}{rt}\\ 
 \hline
 \multicolumn{1}{|c|}{I} & \multicolumn{3}{|c|}{opcode} & func & \multicolumn{2}{|c|}{immediate} & \multicolumn{2}{|c|}{rs} \\ 
 \hline
 \multicolumn{1}{|c|}{J} & \multicolumn{3}{|c|}{opcode} & \multicolumn{5}{|c|}{PC relative immediate} \\ 
- \hline
+\hline
 \multicolumn{1}{|c|}{JR} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{0} & \multicolumn{1}{|c|}{1} & \multicolumn{1}{|c|}{1} \\ 
- \hline
+\hline
 \end{tabular}
 \end{center}
 \newpage
 
-	\section{COMPILER}
-    \section{SAMPLE CODE}
+\section{COMPILER}
+
+\newpage
+\section{PROCESSOR DIAGRAM}
+
+\newpage
+\section{SAMPLE CODE}
 To demonstrate the functionality of the instruction set, three sets of codes were written. The first piece of code demonstrates basic arithmetic operations, including addition, subtraction, multiplication and division. The second and third sets of code demonstrates the summation from 1 to 10. The former performs the procedure recursively, the second performs the procedure non-recursively. Complementary C code is also provided for comparison.  
 
-	\subsection{ARITHMETIC CODE}
-    \subsubsection{Arithmetic Code in C}
-    \begin{lstlisting}[language = C]
-int mult()
-{
-	int c = a * b;
-	return c;
-}
-int div(int a, int b)
-{
-	int c = a / b;
-	return c;
-}
+\subsection{ARITHMETIC CODE}
+\subsubsection{Arithmetic Code in C}
+\begin{lstlisting}[language = C]
+int mult(int a, int b)
+  {
+      int c = a * b;
+      return c;
+  }
+  int div(int a, int b)
+  {
+      int c = a / b;
+      return c;
+  }
 \end{lstlisting}
-    \subsubsection{Arithmetic Code in Assembly}
-	\begin{lstlisting}[language=Ant]
+\subsubsection{Arithmetic Code in Assembly}
+\begin{lstlisting}[language=Ant]
 .data 
 .byte num1 2
 .byte num2 3
@@ -146,59 +151,59 @@ lw -1 $s1
 addi -1 $sp 
 jal MULT
 ADDITION: lw 1 $s2	
-	  add $s1 $s2
-	  lw 0 $s2
+add $s1 $s2
+lw 0 $s2
 MULT: addi -1 $s2
-      sw 0 $s2
-      sw -1 $ra
-      slt_0 $ra $s2
-      beq ADDITION
-      addi -1 $sp
-      sw 0 $s1
+sw 0 $s2
+sw -1 $ra
+slt_0 $ra $s2
+beq ADDITION
+addi -1 $sp
+sw 0 $s1
 -------------------------------------------
 #a = $s1, b = $s2
 
-        sw 0, $ra
-	sw 1, $ra
-        sw 2, $s2
-	sw 3, $s3
+sw 0, $ra
+sw 1, $ra
+sw 2, $s2
+sw 3, $s3
 
 subtraction:
-	lw 3, $s1
-	nand $s2, $s2
-	addi 1, $s2
-	add $s1, $s2
-	sw 3, $s1
+lw 3, $s1
+nand $s2, $s2
+addi 1, $s2
+add $s1, $s2
+sw 3, $s1
 
 division:
-	lw 3, $s2 #check if it has subtracted enough times
-	slt_0 $ra, $s2 # 0 < sum
-	lw 1, $s1
-	addi 1, $s1
-	sw 1, $s1
-	lw 2, $s2 #put b into s2 for subtraction
-	beq subtraction
-	lw 1, $s1
-	addi -1, $s1 #it always overshoots by one
-	sw 1, $s1
-	lw 1, $ra
+lw 3, $s2 #check if it has subtracted enough times
+slt_0 $ra, $s2 # 0 < sum
+lw 1, $s1
+addi 1, $s1
+sw 1, $s1
+lw 2, $s2 #put b into s2 for subtraction
+beq subtraction
+lw 1, $s1
+addi -1, $s1 #it always overshoots by one
+sw 1, $s1
+lw 1, $ra
 
 \end{lstlisting}
-    \subsection{NON-RECURSIVE CODE}
-    \subsubsection{Non-Recursive Code in C}
-   \begin{lstlisting}[language = C]
-function()
-{
-  int i, sum;
-  int n = 10;
-  for (i = 0; i < n; i++)
+\subsection{NON-RECURSIVE CODE}
+\subsubsection{Non-Recursive Code in C}
+\begin{lstlisting}[language = C]
+function(int n)
   {
-    sum += i;
+      int i, sum;
+      int n = 10;
+      for (i = 0; i < n; i++)
+      {
+          sum += i;
+      }
   }
-}
-   \end{lstlisting}
+\end{lstlisting}
 \subsubsection{Non-Recursive Code in Assembly}
-   \begin{lstlisting}[language=Ant]
+\begin{lstlisting}[language=Ant]
 function:
 
 nand $s1, $s1
@@ -224,38 +229,38 @@ nand $s2, $s2
 sl $s1, $s1
 nand $s1 $s2		# $s1 = 1 	
 sw 3, $s1		#store value 1
-	
+
 LOOP:
-	lw 2, $s1	 #load n	
-	slt_0 $s2, $s1	 # i < n
-	slt_1 $s1, $s2	 # i > n
-	beq END		#if i = n, go to END
-	lw 0, $s2	#load i
-	lw 1, $s1	#load sum
-	add $s1, $s2 	#sum($s1) += i
-	sw 1, $s1
-	lw 3, $s1
-	lw 0, $s2	#load i to $s2
-	add $s2, $s1	# i = i + 1
-	jal LOOP
+lw 2, $s1	 #load n	
+slt_0 $s2, $s1	 # i < n
+slt_1 $s1, $s2	 # i > n
+beq END		#if i = n, go to END
+lw 0, $s2	#load i
+lw 1, $s1	#load sum
+add $s1, $s2 	#sum($s1) += i
+sw 1, $s1
+lw 3, $s1
+lw 0, $s2	#load i to $s2
+add $s2, $s1	# i = i + 1
+jal LOOP
 END:
-	lw 1, $s1
-	
-	\end{lstlisting}
-    
-    \subsection{RECURSIVE CODE}
-    \subsubsection{Recursive Code in C}
-   \begin{lstlisting}[language = C]
-int sum()
-{
-	if (n > 1){
-		return n+sum(n-1);
-	}
-		return 1;
-}
-   \end{lstlisting}
+lw 1, $s1
+
+\end{lstlisting}
+
+\subsection{RECURSIVE CODE}
+\subsubsection{Recursive Code in C}
+\begin{lstlisting}[language = C]
+int sum(int n)
+  {
+      if (n > 1){
+          return n+sum(n-1);
+      }
+      return 1;
+  }
+\end{lstlisting}
 \subsubsection{Recursive Code in Assembly}
-   \begin{lstlisting}[language=Ant]
+\begin{lstlisting}[language=Ant]
 function:
 nand $s1, $s1
 nand $s2, $s2  
@@ -266,32 +271,32 @@ sw 0, $s2		#save n in $s2 to memory
 
 #then follows to sum (recursion)
 sum:
-	add $sp, $s1		#adjust stack for 2 items $s1 = -2
-	sw 1, $ra		#save return address to memory
-	sw 2, $s2		#save current n to memory
-	nand $s1, $s1		#s1 becomes 1
-	sw 3, $s1		#saves $s1 (= 1)
-	slt_0 $s1, $s2		#slt_0=n > 1?, 0:1	
-	slt_1 $s2, $s1		#slt_1=n>1?, 0:1 	
-	beq END			#if n < 1, jump to L1
-	
-	nand $s1, $s1		#$s1 = -2
-	lw  3, $s2		#load 1 into $s2
-	add $s1, $s2		#$s1 = -1
-	lw 2, $s2		#load n into $s2
-	add $s2, $s1		#decrement n by 1
-	jal sum			#recursive call
-	
-	lw 3, $s1
-	add $sp, $s1		#pop 2 items from stack (s1 needs to be 1)
-	add $sp, $s1
-	lw 1, $ra		#restore return address
-	lw 0, $s1		#restore original n to s1
-	add $s2, $s1		#s2 = s2 + s1
-	jr $ra			#return to calling address
+add $sp, $s1		#adjust stack for 2 items $s1 = -2
+sw 1, $ra		#save return address to memory
+sw 2, $s2		#save current n to memory
+nand $s1, $s1		#s1 becomes 1
+sw 3, $s1		#saves $s1 (= 1)
+slt_0 $s1, $s2		#slt_0=n > 1?, 0:1	
+slt_1 $s2, $s1		#slt_1=n>1?, 0:1 	
+beq END			#if n < 1, jump to L1
+
+nand $s1, $s1		#$s1 = -2
+lw  3, $s2		#load 1 into $s2
+add $s1, $s2		#$s1 = -1
+lw 2, $s2		#load n into $s2
+add $s2, $s1		#decrement n by 1
+jal sum			#recursive call
+
+lw 3, $s1
+add $sp, $s1		#pop 2 items from stack (s1 needs to be 1)
+add $sp, $s1
+lw 1, $ra		#restore return address
+lw 0, $s1		#restore original n to s1
+add $s2, $s1		#s2 = s2 + s1
+jr $ra			#return to calling address
 
 END: 
-	jr $ra			#return 0 if n is not > 1
-	\end{lstlisting}
-    
+jr $ra			#return 0 if n is not > 1
+\end{lstlisting}
+
 \end{document}

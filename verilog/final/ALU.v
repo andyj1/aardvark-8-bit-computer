@@ -8,27 +8,23 @@
 
 `timescale 1ns / 1ns
 
-module pc_tb();
+module ALU(zero, in);
 
 //-------------Input Ports-----------------------------
-reg [7:0] input1;
-reg reset;
-reg clk;
+input wire [7:0] in;
 //-------------Output Ports----------------------------
-
-wire [7:0] output1; 	//8 bits of output
+output reg zero; 	
 
 //------------------Instructions-----------------------
-always
-	#1 clk = ~clk;
-initial begin
-	clk = 1;
-	reset = 0;
-	input1 = 8'b00000001;
-	$monitor("%b", output1);
 
-	#10 $finish;
+always @(in)
+begin
+	if (in == 8'b11111111) begin
+		zero = 0;
+	end else begin
+		zero = 1;
+	end
 end
 
-pc pc(clk, input1,output1,reset);
+
 endmodule
