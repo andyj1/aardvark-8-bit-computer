@@ -31,13 +31,13 @@ always @*
 	begin
 		instructions  = MDR[pc];
 		if (memRead == 1) begin
-			$display("instructions: %b", instructions);
+			//$display("instructions: %b", instructions);
 			readData = MDR[input_addr]; //load word at the specified address
-			$display("--Memory Reading-- at address: %b : data: %d ",input_addr, readData);
+			//$display("--Memory Reading-- at address: %b : data: %d ",input_addr, readData);
 		end if (memWrite == 1) begin
-			$display("instructions: %b", instructions);
+			//$display("instructions: %b", instructions);
 			MDR[input_addr] = dataMemWrite;
-			$display("--Memory Writing-- at address: %b : data: %d ", input_addr, MDR[input_addr]);
+			//$display("--Memory Writing-- at address: %b : data: %d ", input_addr, MDR[input_addr]);
 		end
 	end
 endmodule
