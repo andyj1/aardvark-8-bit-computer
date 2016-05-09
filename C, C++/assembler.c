@@ -5,14 +5,14 @@ int main()
 {
 	FILE *fp;
 	FILE *outptr;
-	char linkerBuff[255];
-	char buffName[255];
-	printf("Enter linker file: ");
-	scanf("%s",linkerBuff);
+	char linkerBuff[]="link";
+	char buffName[]="output.bin";
+	//printf("Enter linker file: ");
+	//scanf("%s",linkerBuff);
 	fp = fopen(linkerBuff, "r+");
-	printf("Enter the output file: ");
-	scanf("%s", buffName);
-	printf("Starting to assemble...\n");
+	//printf("Enter the output file: ");
+	//scanf("%s", buffName);
+	//printf("Starting to assemble...\n");
 	outptr = fopen(buffName, "w+");
 	int counter = 0;
 	char buff[255];

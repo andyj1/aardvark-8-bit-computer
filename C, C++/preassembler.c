@@ -23,19 +23,19 @@ int main(){
 	FILE *fptr;	//
 	FILE *intfptr;	//intermediate file
 	FILE *outfptr;	//output file
-	char buf[1024];
-	char newNameBuf[255];
+	char buf[]="input.s";
+	char newNameBuf[]="link";
 	char interbuf[1024];
 	char *buffer[1024];
 	char *outbuf[1024];
 	int text = 0;
 	int data = 77;
 	//open input and output file
-	printf("Enter an input file: ");	
-	scanf("%s", buf);
-	printf("Enter an linker file name: ");
-	scanf("%s", newNameBuf);
-	printf("Starting to preassemble...\n");
+	//printf("Enter an input file: ");	
+	//scanf("%s", buf);
+	//printf("Enter an linker file name: ");
+	//scanf("%s", newNameBuf);
+	//printf("Starting to preassemble...\n");
 	fptr = fopen(buf, "r+");
 	intfptr = fopen("intermediate.txt","w+");
 	outfptr = fopen(newNameBuf, "w");
