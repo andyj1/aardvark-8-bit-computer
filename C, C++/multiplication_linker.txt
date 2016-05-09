@@ -1,5 +1,6 @@
 00000010
 00000011
+.text
 sl $sp $sp
 sl $sp $sp
 addi 1 $sp

@@ -103,7 +103,7 @@ int main(){
 		
 		i++;
 	}
-	//fgets(buf,1000,fptr);
+	fprintf(intfptr, "%s\n", buf);
 	while (fgets(buf,1000,fptr) != NULL){
 		if (buf[0] == 'l' && buf[1] == 'a'){
 			//load address psuedo code
@@ -149,7 +149,7 @@ int main(){
 					for (int g = 0; g < 8; g++){
 						myByte[g] = (labellist[m].location)[g];
 					}
-					fprintf(intfptr,"sl %s %s\n", rt,rt);
+					//fprintf(intfptr,"sl %s %s\n", rt,rt);
 					for (int m = 0; m < 8; m++){
 						fprintf(intfptr,"sl %s %s\n", rt,rt);
 						if (myByte[m] == '1'){
