@@ -7,7 +7,7 @@ asm:
 	./preassemble
 	gcc assembler.c -o assemble $(C11)
 	./assemble
-	rm -f intermediate.txt assemble preassemble
+	rm -f intermediate.txt output.bin link assemble preassemble
 run:
 	iverilog -o out.vvp $(SOURCE)
 	vvp out.vvp
@@ -17,6 +17,5 @@ wave:
 	rm -f bag.vcd
 	
 clean:
-	rm -f output.bin link 
 	echo "Done."
 	
