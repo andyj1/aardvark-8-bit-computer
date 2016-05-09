@@ -1,10 +1,20 @@
 SOURCE = main_tb.v
 WAVE = gtkwave
+C11 = -std=c11
 
-all: 
-	iverilog -o bag.vvp $(SOURCE)
-	vvp bag.vvp
+asm: 
+	gcc preassembler.c -o preassemble $(C11)
+	./preassemble
+	gcc assembler.c -o assemble $(C11)
+	./assemble
+	rm -f intermediate.txt output.bin link assemble preassemble
+run:
+	iverilog -o out.vvp $(SOURCE)
+	vvp out.vvp
+	rm -f out.vvp
+wave:
 	$(WAVE) bag.vcd
-	
+	rm -f bag.vcd
 clean:
-	rm -rf *.vvp *.vcd
+	echo "Done."
+	
