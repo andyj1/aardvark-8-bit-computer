@@ -60,9 +60,9 @@ The memory is byte addressable, since all registers can only carry 8 bits and ea
 
 \par Since the fact that a pseudo-instruction--load address("la")--needs to handle loading of data into stack, the assembler was written for this particular processor. If a programmer declared a global variable in the data section of the memory, the pseudo instruction would need to be expanded into the instructions available in the core instruction set. In the worst case scenario, each "la" command would need to be replaced by 16 core instructions. Since the text section can only occupy at most 76 bytes of instructions, there could only be at most 4 bytes for global data, assuming each data is one byte. 
 
-\section{COMPILER}
+\section{ASSEMBLER}
+In order to deliver the assembly code to Verilog to compute, the assembly language had to be converted to binary machine code. To that end, an assembler with a linker were implemented in C language. The first portion of the assembler takes in the assembly file "input.s" and outputs a link file, which is then processed through our second part, which then fully converts it to absolute memory-addressable binary. The output of this is then fed into the Verilog code.
 
-\newpage
 \section{PROCESSOR DIAGRAM}
 
 \newpage
@@ -246,4 +246,6 @@ END:
 jr $ra      #return 0 if n is not > 1
 \end{lstlisting}
 
+\section{MODULE I/O}
 \end{document}
+
