@@ -67,23 +67,23 @@ In order to deliver the assembly code to Verilog to compute, the assembly langua
 
 \newpage
 \section{SAMPLE CODE}
-To demonstrate the functionality of the instruction set, three sets of codes were written. The first piece of code demonstrates basic arithmetic operations, including addition, subtraction, multiplication and division. The second and third sets of code demonstrates the summation from 1 to 10. The former performs the procedure recursively, the second performs the procedure non-recursively. Complementary C code is also provided for comparison.  
-
-\subsection{ARITHMETIC CODE}
-\subsubsection{Arithmetic Code in C}
+\subsection{NON-RECURSIVE CODE}
+\subsubsection{Non-Recursive Code in C}
 \begin{lstlisting}[language = C]
+int main(){
+	int a = 2;
+	int b = 3;
+	int c;
+	c = mult(2,3);
+}
+
 int mult(int a, int b)
   {
       int c = a * b;
       return c;
   }
-  int div(int a, int b)
-  {
-      int c = a / b;
-      return c;
-  }
 \end{lstlisting}
-\subsubsection{Arithmetic Code in Assembly}
+\subsubsection{Non-Recursive Code in Assembly}
 \begin{lstlisting}[language=Ant]
 .data 
 .byte num1 2
@@ -92,112 +92,32 @@ int mult(int a, int b)
 la $sp num1
 lw 0 $s1
 lw 1 $s2
-nand $sp $ra
+nand $ra $sp
 sw 0 $s1
 lw -1 $s1
 addi -1 $sp 
 jal MULT
-ADDITION: lw 1 $s2  
-add $s1 $s2
+ADDITION: lw 1 $s2	
+add $s2 $s1
 lw 0 $s2
-MULT: addi -1 $s2
+MULT: lw -1 $ra
+addi -1 $s2
 sw 0 $s2
-sw -1 $ra
 slt_0 $ra $s2
 beq ADDITION
 addi -1 $sp
 sw 0 $s1
--------------------------------------------
-#a = $s1, b = $s2
-
-sw 0, $ra
-sw 1, $ra
-sw 2, $s2
-sw 3, $s3
-
-subtraction:
-lw 3, $s1
-nand $s2, $s2
-addi 1, $s2
-add $s1, $s2
-sw 3, $s1
-
-division:
-lw 3, $s2 #check if it has subtracted enough times
-slt_0 $ra, $s2 # 0 < sum
-lw 1, $s1
-addi 1, $s1
-sw 1, $s1
-lw 2, $s2 #put b into s2 for subtraction
-beq subtraction
-lw 1, $s1
-addi -1, $s1 #it always overshoots by one
-sw 1, $s1
-lw 1, $ra
-
-\end{lstlisting}
-\subsection{NON-RECURSIVE CODE}
-\subsubsection{Non-Recursive Code in C}
-\begin{lstlisting}[language = C]
-function(int n)
-  {
-      int i, sum;
-      int n = 10;
-      for (i = 0; i < n; i++)
-      {
-          sum += i;
-      }
-  }
-\end{lstlisting}
-\subsubsection{Non-Recursive Code in Assembly}
-\begin{lstlisting}[language=Ant]
-function:
-
-nand $s1, $s1
-nand $s2, $s2  
-sl $s1, $s1
-nand $s2 $s1  # i($s2) = 1 
-sw 0, $s2 # store i
-
-nand $s1, $s1 #s1 becomes 1
-sr $s1, $s1 #initialize sum($s1) = 0
-sw 1, $s1   #store sum($s1) into offset 1 of $sp
-
-add $s1, $s2   #n = 1
-sl $s1, $s1
-sl $s1, $s1
-sl $s1, $s1      #n = 2^3 * n 
-add $s1, $s2   #n = 9
-add $s1, $s2   #n($s1) = 10
-sw 2, $s1 #save 10 to memory
-
-nand $s1, $s1
-nand $s2, $s2  
-sl $s1, $s1
-nand $s1 $s2    # $s1 = 1   
-sw 3, $s1   #store value 1
-
-LOOP:
-lw 2, $s1  #load n  
-slt_0 $s2, $s1   # i < n
-slt_1 $s1, $s2   # i > n
-beq END   #if i = n, go to END
-lw 0, $s2 #load i
-lw 1, $s1 #load sum
-add $s1, $s2  #sum($s1) += i
-sw 1, $s1
-lw 3, $s1
-lw 0, $s2 #load i to $s2
-add $s2, $s1  # i = i + 1
-jal LOOP
-END:
-lw 1, $s1
-
 \end{lstlisting}
 
 \subsection{RECURSIVE CODE}
 \subsubsection{Recursive Code in C}
 \begin{lstlisting}[language = C]
+int main(){
+	int d = 5;
+	int e;
+	e = sum(5);
+}
+
 int sum(int n)
   {
       if (n > 1){
@@ -248,4 +168,3 @@ jr $ra      #return 0 if n is not > 1
 
 \section{MODULE I/O}
 \end{document}
-

@@ -16,9 +16,10 @@ int main()
 	outptr = fopen(buffName, "w+");
 	int counter = 0;
 	char buff[255];
-	char s[3];
+	char s[4] = {'\0'};
 	s[0] = ' ';
 	s[1] = 10;
+	s[2] = 13;
 	char globalVar[4][9] = {'\0'};
 	int numOfGlobals = 0;
 

@@ -8,10 +8,10 @@
 #### Instructions
 *you need Icarus Verilog (to run), and GTKWave installed (for wave form)
 
-From 'multiplication' or 'summation' folder, take out 'input.s'. Then perform the following:
+We have two files: either "mult.s" or "add.s" 
 to compile and run (1), and show waveform using gtkwave simulator(2):
 ####
-	(1) make asm
+	(1) make asm	//input file: either "mult.s" or "add.s"
 		make run
 	(2)	make wave
 

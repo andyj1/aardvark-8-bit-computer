@@ -23,7 +23,7 @@ int main(){
 	FILE *fptr;	//
 	FILE *intfptr;	//intermediate file
 	FILE *outfptr;	//output file
-	char buf[]="input.s";
+	char buf[255];
 	char newNameBuf[]="link";
 	char interbuf[1024];
 	char *buffer[1024];
@@ -31,8 +31,8 @@ int main(){
 	int text = 0;
 	int data = 77;
 	//open input and output file
-	//printf("Enter an input file: ");	
-	//scanf("%s", buf);
+	printf("Enter input: ");	
+	scanf("%s", buf);
 	//printf("Enter an linker file name: ");
 	//scanf("%s", newNameBuf);
 	//printf("Starting to preassemble...\n");
@@ -249,7 +249,48 @@ int main(){
 					a++;
 					d++;
 				}
-				fprintf(outfptr,"%s",newbuf);				
+				if ((newbuf[0] == 'j' && newbuf[1] == 'a' & newbuf[2] == 'l') || (newbuf[0] == 'b' && newbuf[1] == 'e' & newbuf[2] == 'q')){
+			
+				int j = 0;
+				int k = 0;
+				int stillOK = 1;
+				char instLabel[10];
+			
+					while (newbuf[j] != ' '){
+						j++;
+					}
+					j += 1;
+			
+					while ((newbuf[j] >= 48 && newbuf[j] <= 57)||(newbuf[j] >= 65 && newbuf[j] <= 90)||(newbuf[j] >= 97 && newbuf[j] <= 122)){
+						instLabel[k] = newbuf[j];
+						k++;
+						j++;
+					}
+			
+					for (int m = 0; m < numLabel; m++){
+						stillOK = 1;
+						for (int n = 0; n < strlen(instrLabellist[m].inst_loc); n++){
+							if ((instrLabellist[m].inst_loc)[n] != instLabel[n]){
+								stillOK = 0;
+								break;
+							}
+						}
+						if (stillOK == 1){
+							int offset;
+							offset = instrLabellist[m].location - cur_loc ;
+							if (buf[0] == 'b'){
+								fprintf(outfptr, "beq %d\n", offset);
+							}else{
+								fprintf(outfptr, "jal %d\n", offset);
+							}
+							break;
+						}
+					}
+
+				}else{
+					fprintf(outfptr,"%s",newbuf);
+				}
+				//fprintf(outfptr,"%s",newbuf);				
 			}else{
 				fprintf(outfptr,"%s\n",bufff);
 			}
